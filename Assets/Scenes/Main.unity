@@ -255,7 +255,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 45836128}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.17, y: 1.4768136, z: 8.462534}
+  m_LocalPosition: {x: 4.17, y: 1.4768136, z: -46.25}
   m_LocalScale: {x: 0.6525419, y: 1.5197637, z: 0.6920586}
   m_Children: []
   m_Father: {fileID: 85768283}
@@ -440,7 +440,6 @@ GameObject:
   - component: {fileID: 241902868}
   - component: {fileID: 241902872}
   - component: {fileID: 241902867}
-  - component: {fileID: 241902874}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -459,8 +458,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c28ac59af75e1948be14b9a3f75ab0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  jumpforce: 7
+  speed: 20
+  drag: 0.5
+  jumpforce: 50
 --- !u!23 &241902868
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -522,7 +522,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 241902866}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.35000002, y: 2.69, z: -2.47}
+  m_LocalPosition: {x: -2.462, y: 2.69, z: -11.84}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 145556194}
@@ -546,86 +546,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!82 &241902874
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 241902866}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &518901560
 GameObject:
   m_ObjectHideFlags: 0
@@ -707,7 +627,7 @@ Transform:
   m_GameObject: {fileID: 518901560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.68459225, y: 1.78, z: -2.3508453}
-  m_LocalScale: {x: 2.191771, y: 2.19177, z: 2.19177}
+  m_LocalScale: {x: 2.191771, y: 2.19177, z: 12.789587}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -983,7 +903,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 643055401}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.7319058, y: 1.4768136, z: 4.7825336}
+  m_LocalPosition: {x: 0.7319058, y: 1.4768136, z: -21.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 85768283}
@@ -1076,7 +996,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1979499564}
   m_LocalRotation: {x: -0, y: -0, z: -0.2336183, w: 0.97232836}
-  m_LocalPosition: {x: -4.17, y: 1.4768136, z: 8.462534}
+  m_LocalPosition: {x: -4.17, y: 1.4768136, z: 45.7}
   m_LocalScale: {x: 1, y: 0.35391706, z: 1}
   m_Children: []
   m_Father: {fileID: 85768283}

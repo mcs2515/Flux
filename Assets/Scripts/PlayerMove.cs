@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour {
 
-    public float speed = 10f;
-    public float jumpforce = 50f;
+    public float speed;
+    public float drag;
+    public float jumpforce;
     private float gravity = 30f;
     private Vector3 moveDir = Vector3.zero;
     CharacterController controller;
     Vector3 acceleration;
+    Vector3 norm_accel;
 
 	// Use this for initialization
 	void Start () {
@@ -19,35 +21,43 @@ public class PlayerMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        //accelerometer input is based on the rotation of the phone
+
         if (controller.isGrounded)
         {
             acceleration = Input.acceleration;
-            Debug.Log("Acceleration: "+acceleration);
+            Debug.Log("Acceleration: "+ acceleration.sqrMagnitude);
 
             //Debug.Log("Mag: " + acceleration.sqrMagnitude);
-            if (acceleration.sqrMagnitude >= 5f)
-            {         
-                moveDir = new Vector3(0, 0, -Input.acceleration.z);
-                //Debug.Log(moveDir.x + "," + moveDir.y + "," + moveDir.z);
 
-                //moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                moveDir = Vector3.ClampMagnitude(moveDir, 1);
-                moveDir = transform.TransformDirection(moveDir);
-                moveDir *= speed;
+            //jump
+            //if (acceleration.sqrMagnitude >= 2f)
+            //{
+            //    moveDir = new Vector3(0, Input.acceleration.y, 0);
+            //    moveDir = Vector3.ClampMagnitude(moveDir, 1);
+            //    moveDir = transform.TransformDirection(moveDir);
+            //    moveDir *= jumpforce;
+            //}
 
-                if (Input.GetButtonDown("Jump"))
-                {
-                    moveDir.y = jumpforce;
-                }
-            }
+            //run
+            //if (acceleration.sqrMagnitude >= .2f)
+            //{
+            //    //mapping the y movement of phone to z movement of player
+            //    moveDir = new Vector3(0, 0, Mathf.Clamp01(Input.acceleration.z));
+            //    moveDir = Vector3.ClampMagnitude(moveDir, 1);
+            //    moveDir = transform.TransformDirection(moveDir);
+            //    moveDir *= (speed - (drag * Time.deltaTime));
 
-            //slow down if user stops moving
-            //acceleration.y -= gravity * Time.deltaTime;
+            //    Debug.Log("MoveDirection: " + moveDir);
+            //}
         }
 
         //ground the person
         moveDir.y -= gravity * Time.deltaTime;
-        //Debug.Log("player.y = "+ moveDir.y);
+        //slow down the player
+        //moveDir.z -= drag * Time.deltaTime;
+
         controller.Move(moveDir * Time.deltaTime);
     }
 }
