@@ -7,16 +7,27 @@ public class PlayerMove : MonoBehaviour {
     public float speed;
     public float drag;
     public float jumpforce;
-    private float gravity = 30f;
+    private float gravity = 9.81f;
     private Vector3 moveDir = Vector3.zero;
     CharacterController controller;
-    Vector3 acceleration;
+    Vector3 acceleration = Vector3.zero;
     Vector3 norm_accel;
 
-	// Use this for initialization
-	void Start () {
+    private float accelerometerUpdateInterval = 1.0f / 60.0f;
+    private float lowPassKernelWidthInSeconds = 1.0f;
+    public float shakeDetectionThreshold = 0f;
+    public float jumpDetectionThreshold = 0f;
+    private float lowPassFilterFactor;
+    private Vector3 lowPassValue;
+    Vector3 deltaAcceleration;
+
+    // Use this for initialization
+    void Start () {
         controller = gameObject.GetComponent<CharacterController>();
         //Debug.Log("start");
+        lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
+        shakeDetectionThreshold *= shakeDetectionThreshold;
+        lowPassValue = Input.acceleration;
     }
 	
 	// Update is called once per frame
@@ -27,36 +38,44 @@ public class PlayerMove : MonoBehaviour {
         if (controller.isGrounded)
         {
             acceleration = Input.acceleration;
-            Debug.Log("Acceleration: "+ acceleration.sqrMagnitude);
+            lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
+            deltaAcceleration = acceleration - lowPassValue;
 
-            //Debug.Log("Mag: " + acceleration.sqrMagnitude);
+            Debug.Log("delta_accel: " + deltaAcceleration.sqrMagnitude);
+            //if moving
+            if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
+            {
+                moveDir = new Vector3(0, 0, 1f);
+                moveDir = transform.TransformDirection(moveDir);
+                moveDir *= speed;
+            }
+            else
+            {
+                Debug.Log("Slowing down");
+                //slow down player
+                if (moveDir.z > 0)
+                {
+                    moveDir.z -= drag;
+                }
+                else
+                {
+                    moveDir.z = 0;
+                }
+            }
 
-            //jump
-            //if (acceleration.sqrMagnitude >= 2f)
-            //{
-            //    moveDir = new Vector3(0, Input.acceleration.y, 0);
-            //    moveDir = Vector3.ClampMagnitude(moveDir, 1);
-            //    moveDir = transform.TransformDirection(moveDir);
-            //    moveDir *= jumpforce;
-            //}
+            //if jumping
+            if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold)
+            {
+                moveDir = new Vector3(0, 1f, moveDir.z);
+                moveDir = transform.TransformDirection(moveDir);
+                moveDir.y *= jumpforce;
 
-            //run
-            //if (acceleration.sqrMagnitude >= .2f)
-            //{
-            //    //mapping the y movement of phone to z movement of player
-            //    moveDir = new Vector3(0, 0, Mathf.Clamp01(Input.acceleration.z));
-            //    moveDir = Vector3.ClampMagnitude(moveDir, 1);
-            //    moveDir = transform.TransformDirection(moveDir);
-            //    moveDir *= (speed - (drag * Time.deltaTime));
-
-            //    Debug.Log("MoveDirection: " + moveDir);
-            //}
+                //Debug.Log("z: " + moveDir.z);
+            }
         }
 
-        //ground the person
+        //always ground the person
         moveDir.y -= gravity * Time.deltaTime;
-        //slow down the player
-        //moveDir.z -= drag * Time.deltaTime;
 
         controller.Move(moveDir * Time.deltaTime);
     }

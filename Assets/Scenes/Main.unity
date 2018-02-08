@@ -460,7 +460,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   drag: 0.5
-  jumpforce: 50
+  jumpforce: 10
+  shakeDetectionThreshold: 1
+  jumpDetectionThreshold: 5
 --- !u!23 &241902868
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -522,7 +524,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 241902866}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.462, y: 2.69, z: -11.84}
+  m_LocalPosition: {x: -2.462, y: 2.69, z: -57.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 145556194}
