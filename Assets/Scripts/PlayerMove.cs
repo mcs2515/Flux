@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour {
 
+
+    CharacterController controller;
+    Vector3 moveDir = Vector3.zero;
+
     public float speed;
     public float drag;
     public float jumpforce;
-    private float gravity = 9.81f;
-    private Vector3 moveDir = Vector3.zero;
-    CharacterController controller;
-    Vector3 acceleration = Vector3.zero;
-    Vector3 norm_accel;
+    float gravity = 9.81f;
 
-    private float accelerometerUpdateInterval = 1.0f / 60.0f;
-    private float lowPassKernelWidthInSeconds = 1.0f;
+    Vector3 acceleration = Vector3.zero;
+    Vector3 deltaAcceleration;
+    float accelerometerUpdateInterval = 1.0f / 60.0f;
+    float lowPassKernelWidthInSeconds = 1.0f;
     public float shakeDetectionThreshold = 0f;
     public float jumpDetectionThreshold = 0f;
-    private float lowPassFilterFactor;
+    float lowPassFilterFactor;
     private Vector3 lowPassValue;
-    Vector3 deltaAcceleration;
 
     // Use this for initialization
     void Start () {
@@ -28,6 +29,8 @@ public class PlayerMove : MonoBehaviour {
         lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
         shakeDetectionThreshold *= shakeDetectionThreshold;
         lowPassValue = Input.acceleration;
+
+        Input.gyro.enabled = true;
     }
 	
 	// Update is called once per frame
@@ -41,7 +44,8 @@ public class PlayerMove : MonoBehaviour {
             lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
             deltaAcceleration = acceleration - lowPassValue;
 
-            Debug.Log("delta_accel: " + deltaAcceleration.sqrMagnitude);
+            //Debug.Log("delta_accel: " + deltaAcceleration.sqrMagnitude);
+            //Debug.Log("accleration: " + acceleration);
             //if moving
             if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
             {
@@ -52,15 +56,7 @@ public class PlayerMove : MonoBehaviour {
             else
             {
                 Debug.Log("Slowing down");
-                //slow down player
-                if (moveDir.z > 0)
-                {
-                    moveDir.z -= drag;
-                }
-                else
-                {
-                    moveDir.z = 0;
-                }
+                
             }
 
             //if jumping
@@ -72,10 +68,23 @@ public class PlayerMove : MonoBehaviour {
 
                 //Debug.Log("z: " + moveDir.z);
             }
+
+            //rotate camera based on accelerometer
+            transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y, 0);
         }
 
         //always ground the person
         moveDir.y -= gravity * Time.deltaTime;
+
+        //slow down player
+        if (moveDir.z > 0)
+        {
+            moveDir.z -= drag;
+        }
+        else
+        {
+            moveDir.z = 0;
+        }
 
         controller.Move(moveDir * Time.deltaTime);
     }
