@@ -7,13 +7,14 @@ public class PlayerMove : MonoBehaviour {
 
     CharacterController controller;
     Vector3 moveDir = Vector3.zero;
+    Camera controllerCamera;
 
     public float speed;
     public float drag;
     public float jumpforce;
     float gravity = 9.81f;
 
-    Vector3 acceleration = Vector3.zero;
+    Vector3 acceleration;
     Vector3 deltaAcceleration;
     float accelerometerUpdateInterval = 1.0f / 60.0f;
     float lowPassKernelWidthInSeconds = 1.0f;
@@ -25,12 +26,14 @@ public class PlayerMove : MonoBehaviour {
     // Use this for initialization
     void Start () {
         controller = gameObject.GetComponent<CharacterController>();
+        acceleration = Vector3.zero;
         //Debug.Log("start");
         lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
         shakeDetectionThreshold *= shakeDetectionThreshold;
         lowPassValue = Input.acceleration;
 
         Input.gyro.enabled = true;
+        controllerCamera = GameObject.Find("playerCamera").GetComponent<Camera>();
     }
 	
 	// Update is called once per frame
@@ -53,11 +56,6 @@ public class PlayerMove : MonoBehaviour {
                 moveDir = transform.TransformDirection(moveDir);
                 moveDir *= speed;
             }
-            else
-            {
-                Debug.Log("Slowing down");
-                
-            }
 
             //if jumping
             if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold)
@@ -69,8 +67,9 @@ public class PlayerMove : MonoBehaviour {
                 //Debug.Log("z: " + moveDir.z);
             }
 
-            //rotate camera based on accelerometer
+            //rotate character and its camera based on accelerometer
             transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y, 0);
+            //controllerCamera.transform.Rotate(-Input.gyro.rotationRateUnbiased.x, 0, 0);
         }
 
         //always ground the person
@@ -80,10 +79,12 @@ public class PlayerMove : MonoBehaviour {
         if (moveDir.z > 0)
         {
             moveDir.z -= drag;
+            //moveDir.x -= drag;
         }
         else
         {
             moveDir.z = 0;
+            //moveDir.x = 0;
         }
 
         controller.Move(moveDir * Time.deltaTime);
