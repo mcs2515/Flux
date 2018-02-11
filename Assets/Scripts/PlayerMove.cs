@@ -74,6 +74,7 @@ public class PlayerMove : MonoBehaviour {
 
         //always ground the person
         moveDir.y -= gravity * Time.deltaTime;
+        moveDir.x = 0;
 
         //slow down player
         if (moveDir.z > 0)
