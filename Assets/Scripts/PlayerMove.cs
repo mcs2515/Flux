@@ -43,77 +43,86 @@ public class PlayerMove : MonoBehaviour {
 
         //accelerometer input is based on the rotation of the phone
 
-        if (controller.isGrounded)
-        {
-            acceleration = Input.acceleration;
-            lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
-            deltaAcceleration = acceleration - lowPassValue;
+        //if (controller.isGrounded)
+        //{
+        //    acceleration = Input.acceleration;
+        //    lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
+        //    deltaAcceleration = acceleration - lowPassValue;
 
-            //Debug.Log("sqrt_delta_accel: " + deltaAcceleration.sqrMagnitude);
-            //Debug.Log("accleration: " + acceleration);
-            Debug.Log("delta_accel: " + deltaAcceleration);
+        //    //Debug.Log("sqrt_delta_accel: " + deltaAcceleration.sqrMagnitude);
+        //    //Debug.Log("accleration: " + acceleration);
+        //    Debug.Log("delta_accel: " + deltaAcceleration);
 
-            if (!ducking)
-            {
-                //if moving
-                if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
-                {
-                    moveDir = new Vector3(0, 0, 1f);
-                    moveDir = transform.TransformDirection(moveDir);
-                    moveDir *= speed;
-                }
+        //    if (!ducking)
+        //    {
+        //        //if moving
+        //        if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
+        //        {
+        //            moveDir = new Vector3(0, 0, 1f);
+        //            moveDir = transform.TransformDirection(moveDir);
+        //            moveDir *= speed;
+        //        }
 
-                //if jumping
-                if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold)
-                {
-                    moveDir = new Vector3(0, 1f, moveDir.z);
-                    Debug.Log("move z: " + moveDir.z);
-                    moveDir = transform.TransformDirection(moveDir);
-                    moveDir.y *= jumpforce;
+        //        //if jumping
+        //        if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold)
+        //        {
+        //            moveDir = new Vector3(0, 1f, moveDir.z);
+        //            Debug.Log("move z: " + moveDir.z);
+        //            moveDir = transform.TransformDirection(moveDir);
+        //            moveDir.y *= jumpforce;
 
-                    //Debug.Log("z: " + moveDir.z);
-                }
+        //            //Debug.Log("z: " + moveDir.z);
+        //        }
 
-                //if ducking
-                else if (deltaAcceleration.sqrMagnitude <= duckDetectionThreshold)
-                {
-                    //skrink player
-                    transform.localScale = new Vector3(1f, .5f, 1f);
-                    ducking = true;
-                }
-            }
-            else
-            {
-                //if moving again
-                if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
-                {
-                    transform.localScale = new Vector3(1f, 1f, 1f);
-                    ducking = false;
-                }
-            }
+        //        //if ducking
+        //        else if (deltaAcceleration.sqrMagnitude <= duckDetectionThreshold)
+        //        {
+        //            //skrink player
+        //            transform.localScale = new Vector3(1f, .5f, 1f);
+        //            ducking = true;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //if moving again
+        //        if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
+        //        {
+        //            transform.localScale = new Vector3(1f, 1f, 1f);
+        //            ducking = false;
+        //        }
+        //    }
 
 
-            //rotate character and its camera based on accelerometer
-            transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y, 0);
-            //controllerCamera.transform.Rotate(-Input.gyro.rotationRateUnbiased.x, 0, 0);
-        }
+        //    //rotate character and its camera based on accelerometer
+        //    transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y, 0);
+        //    //controllerCamera.transform.Rotate(-Input.gyro.rotationRateUnbiased.x, 0, 0);
+        //}
 
-        //always ground the person
-        moveDir.y -= gravity * Time.deltaTime;
-        moveDir.x = 0;
+        ////always ground the person
+        //moveDir.y -= gravity * Time.deltaTime;
+        //moveDir.x = 0;
 
-        //slow down player
-        if (moveDir.z > 0)
-        {
-            moveDir.z -= drag;
-            //moveDir.x -= drag;
-        }
-        else
-        {
-            moveDir.z = 0;
-            //moveDir.x = 0;
-        }
+        ////slow down player
+        //if (moveDir.z > 0)
+        //{
+        //    moveDir.z -= drag;
+        //    //moveDir.x -= drag;
+        //}
+        //else
+        //{
+        //    moveDir.z = 0;
+        //    //moveDir.x = 0;
+        //}
 
-        controller.Move(moveDir * Time.deltaTime);
+        //controller.Move(moveDir * Time.deltaTime);
+
+        Vector3 dir = Vector3.zero;
+        dir.x = -Input.acceleration.y;
+        dir.z = Input.acceleration.x;
+        if (dir.sqrMagnitude > 1)
+            dir.Normalize();
+
+        dir *= Time.deltaTime;
+        controller.Move(dir * speed);
     }
 }
