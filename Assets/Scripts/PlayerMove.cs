@@ -20,8 +20,10 @@ public class PlayerMove : MonoBehaviour {
     float lowPassKernelWidthInSeconds = 1.0f;
     public float shakeDetectionThreshold = 0f;
     public float jumpDetectionThreshold = 0f;
+    public float duckDetectionThreshold = 0f;
     float lowPassFilterFactor;
     private Vector3 lowPassValue;
+    private bool ducking = false;
 
     // Use this for initialization
     void Start () {
@@ -47,25 +49,49 @@ public class PlayerMove : MonoBehaviour {
             lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
             deltaAcceleration = acceleration - lowPassValue;
 
-            //Debug.Log("delta_accel: " + deltaAcceleration.sqrMagnitude);
+            //Debug.Log("sqrt_delta_accel: " + deltaAcceleration.sqrMagnitude);
             //Debug.Log("accleration: " + acceleration);
-            //if moving
-            if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
+            Debug.Log("delta_accel: " + deltaAcceleration);
+
+            if (!ducking)
             {
-                moveDir = new Vector3(0, 0, 1f);
-                moveDir = transform.TransformDirection(moveDir);
-                moveDir *= speed;
+                //if moving
+                if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
+                {
+                    moveDir = new Vector3(0, 0, 1f);
+                    moveDir = transform.TransformDirection(moveDir);
+                    moveDir *= speed;
+                }
+
+                //if jumping
+                if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold)
+                {
+                    moveDir = new Vector3(0, 1f, moveDir.z);
+                    Debug.Log("move z: " + moveDir.z);
+                    moveDir = transform.TransformDirection(moveDir);
+                    moveDir.y *= jumpforce;
+
+                    //Debug.Log("z: " + moveDir.z);
+                }
+
+                //if ducking
+                else if (deltaAcceleration.sqrMagnitude <= duckDetectionThreshold)
+                {
+                    //skrink player
+                    transform.localScale = new Vector3(1f, .5f, 1f);
+                    ducking = true;
+                }
+            }
+            else
+            {
+                //if moving again
+                if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
+                {
+                    transform.localScale = new Vector3(1f, 1f, 1f);
+                    ducking = false;
+                }
             }
 
-            //if jumping
-            if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold)
-            {
-                moveDir = new Vector3(0, 1f, moveDir.z);
-                moveDir = transform.TransformDirection(moveDir);
-                moveDir.y *= jumpforce;
-
-                //Debug.Log("z: " + moveDir.z);
-            }
 
             //rotate character and its camera based on accelerometer
             transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y, 0);
