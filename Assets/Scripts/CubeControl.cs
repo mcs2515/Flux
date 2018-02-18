@@ -10,6 +10,7 @@ public class CubeControl : MonoBehaviour {
 	private Vector3 endMarker;
 	private float journeyLength;
 	private Vector3 currentPos;
+	bool upwards = true;
 
 	// Use this for initialization
 	void Start () {
@@ -27,16 +28,27 @@ public class CubeControl : MonoBehaviour {
 
 	public void assignStart(float t){
 		startTime = t;
-		Debug.Log (startTime + " assigned");
 	}
 
-	void moveBlock(){
-		Debug.Log (startTime);
+	private void moveBlock(){
 		float distCovered = 0;
+		float totalTime = (Vector3.Distance (startMarker, endMarker) / speed); 
 		if (Time.time > startTime) {
-			distCovered = (Time.time - startTime) * speed;
+			distCovered = (Time.time - startTime * speed);
 		}
 		float fracJourney = distCovered / journeyLength;
-		currentPos = Vector3.Lerp(startMarker, endMarker, fracJourney);
+		if (upwards) {
+			currentPos = Vector3.Lerp (startMarker, endMarker, fracJourney);
+			if (Vector3.Distance(currentPos, endMarker) <= 0.1) {
+				upwards = false;
+				startTime += totalTime;
+			}
+		} else {
+			currentPos = Vector3.Lerp (endMarker,startMarker, fracJourney);
+			if (Vector3.Distance(currentPos, startMarker) <= 0.1) {
+				upwards = true;
+				startTime += totalTime;
+			}
+		}
 	}
 }
