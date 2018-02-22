@@ -65,14 +65,14 @@ public class PlayerMove : MonoBehaviour {
             //if jumping
             if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold)
             {
-                //moveDir = new Vector3(0, 1f, moveDir.z);
-                //moveDir = transform.TransformDirection(moveDir);
-                //moveDir.y *= jumpforce;
+                moveDir = new Vector3(0, 1f, moveDir.z);
+                moveDir = transform.TransformDirection(moveDir);
+                moveDir.y *= jumpforce;
             }
         }
 
         //always ground the person
-        //moveDir.y -= gravity * Time.deltaTime;
+        moveDir.y -= gravity * Time.deltaTime;
         moveDir.x = 0;
 
         //slow down player
