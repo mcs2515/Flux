@@ -25,13 +25,17 @@ public class MeshControl : MonoBehaviour {
 		speed = 1.0f;
 
 		for (int i = 0; i < originalVertices.Length; i++) {
-			displacedVertices[i] = originalVertices[i] + new Vector3(0, 3.0f, 0);
+			Debug.Log (originalVertices [i]);
+			displacedVertices[i] = originalVertices[i] + new Vector3(0, 1.0f, 0);
+			if (originalVertices [i].y == 0) {
+				displacedVertices [i] = originalVertices [i];
+			}
 
 			float tileLength = Mathf.Sqrt (originalVertices.Length);
 			//offset start times for each vertice
 			startTimes[i] = controllerImg.GetPixel (Mathf.RoundToInt((float)i%tileLength/tileLength*controllerImg.width), Mathf.RoundToInt(Mathf.Floor((float)i/tileLength)/tileLength*controllerImg.height)).grayscale;
-			upwardBound [i] = true;}
-
+			upwardBound [i] = true;
+		}
 	}
 	
 	// Update is called once per frame
@@ -44,6 +48,11 @@ public class MeshControl : MonoBehaviour {
 	}
 
 	void UpdateVertex (int i) {
+		if (displacedVertices [i].y == 0) {
+			currentVertices [i] = displacedVertices [i];
+			return;
+		}
+
 		float distCovered = 0;
 		float journeyLength = Vector3.Distance (originalVertices [i], displacedVertices [i]);
 		float totalTime = (Vector3.Distance (originalVertices[i], displacedVertices[i]) / speed); 
@@ -64,5 +73,10 @@ public class MeshControl : MonoBehaviour {
 				startTimes[i] += totalTime;
 			}
 		}
+	}
+
+	void UpdateVertexColor(int i){
+		float tileLength = Mathf.Sqrt (originalVertices.Length);
+		currentVertices[i] = new Vector3(0, speed*controllerImg.GetPixel (Mathf.RoundToInt((float)i%tileLength/tileLength*controllerImg.width), Mathf.RoundToInt(Mathf.Floor((float)i/tileLength)/tileLength*controllerImg.height)).grayscale, 0);
 	}
 }
