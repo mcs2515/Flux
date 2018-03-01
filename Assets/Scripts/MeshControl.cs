@@ -14,8 +14,9 @@ public class MeshControl : MonoBehaviour {
 	private Texture2D controllerImg;
 	public Texture2D[] transIn;
 	public Texture2D[] jumpNoise;
-	private GameObject[] spheres;
-	private int controllerI, sphereTexOffset;
+	private GameObject[] extras;
+	private int controllerI;
+	private float sphereTexOffset;
 	bool transitioning;
 
 	// Use this for initialization
@@ -25,9 +26,9 @@ public class MeshControl : MonoBehaviour {
 		originalVertices = deformingMesh.vertices;
 		displacedVertices = new Vector3[originalVertices.Length];
 		currentVertices = new Vector3[originalVertices.Length];
-		spheres = new GameObject[Mathf.RoundToInt((float)originalVertices.Length/4)];
+		extras = new GameObject[Mathf.RoundToInt((float)originalVertices.Length/4)];
 		transitioning = true;
-		sphereTexOffset = 0;
+		sphereTexOffset = 0.016129f;
 
 		/*startTimes = new float[originalVertices.Length];
 		upwardBound = new bool[originalVertices.Length];
@@ -60,16 +61,26 @@ public class MeshControl : MonoBehaviour {
 
 		int j = 0;
 		for (int i = 0; i < originalVertices.Length; i++) {
-			spheres [i] = GameObject.CreatePrimitive(PrimitiveType.Plane);
-			//spheres [i] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			spheres [i].transform.SetParent(transform);
-			spheres [i].transform.position = transform.position + originalVertices[j] + new Vector3(0,10,0);
-			float sphereRad = 0.05f;
-			spheres [i].transform.localScale = new Vector3 (sphereRad, sphereRad, sphereRad);
+			extras [i] = GameObject.CreatePrimitive(PrimitiveType.Plane);
 
-			spheres [i].GetComponent<Renderer> ().material = GameObject.Find("glowTexHolder").GetComponent<Renderer>().material;
-			spheres [i].GetComponent<Renderer> ().material.SetTextureScale("_MainTex", new Vector2(2f,2f));
+			GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			sphere.transform.SetParent (extras[i].transform);
+			float sphereRad = 0.3f;
+			sphere.transform.localScale = new Vector3 (sphereRad, sphereRad, sphereRad);
+			sphere.GetComponent<Renderer> ().material = GameObject.Find("gridTexHolder").GetComponent<Renderer>().material;
+
+			extras [i].transform.SetParent(transform);
+			extras [i].transform.position = transform.position + originalVertices[j] + new Vector3(0,10,0);
+			extras [i].transform.Rotate(-90,0,0);
+			//float sphereRad = 0.03f;
+			float extraRad = 0.1f;
+			extras [i].transform.localScale = new Vector3 (extraRad, extraRad, extraRad);
+
+			extras [i].GetComponent<Renderer> ().material = GameObject.Find("glowTexHolder").GetComponent<Renderer>().material;
 			j += 4;
+
+			float texScale = 0.5f;
+			extras [i].GetComponent<Renderer> ().material.SetTextureScale ("_MainTex", new Vector2(1f, 0.1f));
 		}
 	}
 	
@@ -95,12 +106,11 @@ public class MeshControl : MonoBehaviour {
 		}
 
 		int j = 0;
-		for (int i = 0; i < spheres.Length; i++) {
-			spheres [i].transform.position = transform.position + transform.localScale.x*currentVertices [j];
-			spheres [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(sphereTexOffset,0));
-			Debug.Log(sphereTexOffset + " " + spheres[i].GetComponent<Renderer>().material);
+		for (int i = 0; i < extras.Length; i++) {
+			extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j];
+			extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(sphereTexOffset,0));
 			j += 4;
-			sphereTexOffset = (sphereTexOffset + 500) % 15500;
+			sphereTexOffset = (sphereTexOffset - 0.032258f) % 1;
 		}
 	}
 
