@@ -8,15 +8,18 @@ public class MeshControl : MonoBehaviour {
 
 	Mesh deformingMesh;
 	Vector3[] originalVertices, displacedVertices, currentVertices;
-	float[] startTimes;
 	bool[] upwardBound;
+
+	public Material gridTex;
+	public Material glowTex;
+
 	float speed;
 	private Texture2D controllerImg;
 	public Texture2D[] transIn;
 	public Texture2D[] jumpNoise;
 	private GameObject[] extras;
 	private int controllerI;
-	private float sphereTexOffset;
+	private float glowTexOffset;
 	bool transitioning;
 
 	// Use this for initialization
@@ -28,23 +31,7 @@ public class MeshControl : MonoBehaviour {
 		currentVertices = new Vector3[originalVertices.Length];
 		extras = new GameObject[Mathf.RoundToInt((float)originalVertices.Length)];
 		transitioning = true;
-		sphereTexOffset = 0.016129f;
-
-		/*startTimes = new float[originalVertices.Length];
-		upwardBound = new bool[originalVertices.Length];
-		speed = 1.0f;*/
-
-		//for (int i = 0; i < originalVertices.Length; i++) {
-		//	displacedVertices[i] = originalVertices[i] + new Vector3(0, 1.0f, 0);
-		//	if (originalVertices [i].y == 0) {
-		//		displacedVertices [i] = originalVertices [i];
-		//	}
-		//
-		//	float tileLength = Mathf.Sqrt (originalVertices.Length);
-		//	offset start times for each vertice
-		//	startTimes[i] = controllerImg.GetPixel (Mathf.RoundToInt((float)i%tileLength/tileLength*controllerImg.width), Mathf.RoundToInt(Mathf.Floor((float)i/tileLength)/tileLength*controllerImg.height)).grayscale;
-		//	upwardBound [i] = true;
-		//}
+		glowTexOffset = 0.016129f;
 
 		Object[] transInObjs = Resources.LoadAll("jumpTransition/", typeof(Texture2D));
 		Object[] jumpNoiseObjs = Resources.LoadAll("jumpNoise/", typeof(Texture2D));
@@ -67,20 +54,22 @@ public class MeshControl : MonoBehaviour {
 			sphere.transform.SetParent (extras[i].transform);
 			float sphereRad = 0.2f;
 			sphere.transform.localScale = new Vector3 (sphereRad, sphereRad, sphereRad);
-			sphere.GetComponent<Renderer> ().material = GameObject.Find("gridTexHolder").GetComponent<Renderer>().material;
+			sphere.GetComponent<Renderer> ().material = gridTex;
+			sphere.transform.localPosition += new Vector3 (0,0,-4f);
 
 			extras [i].transform.SetParent(transform);
-			extras [i].transform.position = transform.position + originalVertices[j] + new Vector3(0,10,0);
-			extras [i].transform.Rotate(-90,0,0);
+			extras [i].transform.position = transform.position + originalVertices[j] + new Vector3(0,-20,0);
+			extras [i].transform.Rotate(90,0,0);
+			//extras [i].transform.localScale = new Vector3 (0, 0, 4f);
 			//float sphereRad = 0.03f;
 			float extraRad = 0.1f;
 			extras [i].transform.localScale = new Vector3 (extraRad, extraRad, extraRad);
 
-			extras [i].GetComponent<Renderer> ().material = GameObject.Find("glowTexHolder").GetComponent<Renderer>().material;
+			extras [i].GetComponent<Renderer> ().material = glowTex;
 			j ++;
 
 			float texScale = 0.5f;
-			extras [i].GetComponent<Renderer> ().material.SetTextureScale ("_MainTex", new Vector2(1f, 0.1f));
+			//extras [i].GetComponent<Renderer> ().material.SetTextureScale ("_MainTex", new Vector2(1f, 0.1f));
 		}
 	}
 	
@@ -107,45 +96,18 @@ public class MeshControl : MonoBehaviour {
 
 		int j = 0;
 		for (int i = 0; i < extras.Length; i++) {
-			extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j];
-			extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(sphereTexOffset,0));
+			extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j] + new Vector3(0,-3f,0);
+			extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(glowTexOffset,0));
 			j ++;
-			sphereTexOffset = (sphereTexOffset - 0.032258f) % 1;
+			//glowTexOffset = (glowTexOffset - 0.07f) % 1;
 		}
 	}
 
-	/*void UpdateVertex (int i) {
-		if (displacedVertices [i].y == 0) {
-			currentVertices [i] = displacedVertices [i];
-			return;
-		}
-
-		float distCovered = 0;
-		float journeyLength = Vector3.Distance (originalVertices [i], displacedVertices [i]);
-		float totalTime = (Vector3.Distance (originalVertices[i], displacedVertices[i]) / speed); 
-		if (Time.time > startTimes[i]) {
-			distCovered = (Time.time - startTimes[i] * speed);
-		}
-		float fracJourney = distCovered / journeyLength;
-		if (upwardBound[i]) {
-			currentVertices[i] = Vector3.Lerp (originalVertices[i], displacedVertices[i], fracJourney);
-			if (Vector3.Distance(currentVertices[i], displacedVertices[i]) <= 0.1) {
-				upwardBound[i] = false;
-				startTimes[i] += totalTime;
-			}
-		} else {
-			currentVertices[i] = Vector3.Lerp (displacedVertices[i],originalVertices[i], fracJourney);
-			if (Vector3.Distance(currentVertices[i], originalVertices[i]) <= 0.1) {
-				upwardBound[i] = true;
-				startTimes[i] += totalTime;
-			}
-		}
-	}*/
-
 	void UpdateVertexColor(Texture2D[] controllerImgs, int i){
-		float tileLength = Mathf.Sqrt (originalVertices.Length);
+		float tileL = Mathf.Round(Mathf.Sqrt (originalVertices.Length/2));
+		float tileW = tileL*2;
 		controllerImg = controllerImgs [controllerI];
-		float colorVal = controllerImg.GetPixel (Mathf.RoundToInt ((float)i % tileLength / tileLength * controllerImg.width), Mathf.RoundToInt (Mathf.Floor ((float)i / tileLength) / tileLength * controllerImg.height)).grayscale;
+		float colorVal = controllerImg.GetPixel (Mathf.RoundToInt ((float)i % tileW / tileW * controllerImg.width), Mathf.RoundToInt (Mathf.Floor ((float)i / tileL) / tileL * controllerImg.height)).grayscale;
 		currentVertices[i] = originalVertices[i] + new Vector3(0, 1*colorVal, 0);
 	}
 }
