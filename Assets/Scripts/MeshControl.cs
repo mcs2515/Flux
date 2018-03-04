@@ -26,7 +26,7 @@ public class MeshControl : MonoBehaviour {
 		originalVertices = deformingMesh.vertices;
 		displacedVertices = new Vector3[originalVertices.Length];
 		currentVertices = new Vector3[originalVertices.Length];
-		extras = new GameObject[Mathf.RoundToInt((float)originalVertices.Length/4)];
+		extras = new GameObject[Mathf.RoundToInt((float)originalVertices.Length)];
 		transitioning = true;
 		sphereTexOffset = 0.016129f;
 
@@ -65,7 +65,7 @@ public class MeshControl : MonoBehaviour {
 
 			GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			sphere.transform.SetParent (extras[i].transform);
-			float sphereRad = 0.3f;
+			float sphereRad = 0.2f;
 			sphere.transform.localScale = new Vector3 (sphereRad, sphereRad, sphereRad);
 			sphere.GetComponent<Renderer> ().material = GameObject.Find("gridTexHolder").GetComponent<Renderer>().material;
 
@@ -77,7 +77,7 @@ public class MeshControl : MonoBehaviour {
 			extras [i].transform.localScale = new Vector3 (extraRad, extraRad, extraRad);
 
 			extras [i].GetComponent<Renderer> ().material = GameObject.Find("glowTexHolder").GetComponent<Renderer>().material;
-			j += 4;
+			j ++;
 
 			float texScale = 0.5f;
 			extras [i].GetComponent<Renderer> ().material.SetTextureScale ("_MainTex", new Vector2(1f, 0.1f));
@@ -109,7 +109,7 @@ public class MeshControl : MonoBehaviour {
 		for (int i = 0; i < extras.Length; i++) {
 			extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j];
 			extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(sphereTexOffset,0));
-			j += 4;
+			j ++;
 			sphereTexOffset = (sphereTexOffset - 0.032258f) % 1;
 		}
 	}
