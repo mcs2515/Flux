@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.10354895, g: 0.67954034, b: 0.67093164, a: 1}
+  m_IndirectSpecularColor: {r: 0.07577371, g: 0.7797074, b: 0.83655214, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -128,7 +128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &20045834
 Transform:
   m_ObjectHideFlags: 0
@@ -6234,8 +6234,8 @@ Transform:
   - {fileID: 1387884105}
   - {fileID: 1489540436}
   - {fileID: 1271672781}
-  - {fileID: 1928954436}
   - {fileID: 1643835052}
+  - {fileID: 1928954436}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6518,7 +6518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1004977814
 Animator:
   serializedVersion: 3
@@ -7092,7 +7092,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1374672380
 Transform:
   m_ObjectHideFlags: 0
@@ -7359,11 +7359,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c28ac59af75e1948be14b9a3f75ab0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 12
-  drag: 0.3
-  jumpforce: 12
+  speed: 13
+  drag: 0.2
+  jumpforce: 13
   shakeDetectionThreshold: 0.8
-  jumpDetectionThreshold: 2.5
+  jumpDetectionThreshold: 3
 --- !u!143 &1513733899
 CharacterController:
   m_ObjectHideFlags: 0
@@ -11909,7 +11909,7 @@ Transform:
   - {fileID: 1551739898}
   - {fileID: 295930062}
   m_Father: {fileID: 940864693}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1950248047
 GameObject:
