@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 5c50625a4b4d34997b4964350c489af3
+timeCreated: 1520522872
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: DIN-RegularAlternate
+  fontNames:
+  - DIN-RegularAlternate
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
