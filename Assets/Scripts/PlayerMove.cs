@@ -12,7 +12,7 @@ public class PlayerMove : MonoBehaviour {
     public float speed;
     public float drag;
     public float jumpforce;
-    float gravity = 9.81f;
+    float gravity = 9.5f;
 
     Vector3 acceleration;
     Vector3 deltaAcceleration;
@@ -20,7 +20,6 @@ public class PlayerMove : MonoBehaviour {
     float lowPassKernelWidthInSeconds = 1.0f;
     public float shakeDetectionThreshold = 0f;
     public float jumpDetectionThreshold = 0f;
-    public float duckDetectionThreshold = 0f;
     float lowPassFilterFactor;
     private Vector3 lowPassValue;
 
@@ -53,7 +52,7 @@ public class PlayerMove : MonoBehaviour {
             //Debug.Log("delta_accel: " + deltaAcceleration);
 
             //rotate character and its camera based on accelerometer
-            controller.transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y, 0);
+            controller.transform.Rotate(0, -Input.gyro.rotationRateUnbiased.y*1.5f, 0);
 
             //if moving
             if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold)
@@ -65,7 +64,7 @@ public class PlayerMove : MonoBehaviour {
             //if jumping
             if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold)
             {
-                moveDir = new Vector3(0, 1f, moveDir.z);
+                moveDir = new Vector3(0, 1f, moveDir.z*1.5f);
                 moveDir = transform.TransformDirection(moveDir);
                 moveDir.y *= jumpforce;
             }
