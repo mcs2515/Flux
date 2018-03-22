@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class GameStateController : MonoBehaviour {
 
-
+	static GameStateController instance;
+	public bool paused;
 
 
 	// Use this for initialization
 	void Start () {
-		
+		paused = false;
 	}
 	
 	// Update is called once per frame
@@ -24,10 +25,24 @@ public class GameStateController : MonoBehaviour {
 		//else bring them to main menu
 	}
 
-	void Resume(){
+	public void Resume(){
+		paused = false;
+		Debug.Log ("resumed");
 	}
 
-	void Pause(){
+	public void Pause(){
+		paused = true;
+		Debug.Log ("paused");
+	}
+
+	public static GameStateController Instance{
+		get{
+			if (instance == null) {
+				instance = GameStateController.FindObjectOfType<GameStateController> ();
+			}
+			return GameStateController.instance; 
+		}
+		set{ GameStateController.instance = value;}
 	}
 
 	void Quit(){

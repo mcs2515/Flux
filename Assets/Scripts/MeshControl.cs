@@ -76,31 +76,33 @@ public class MeshControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (transitioning) {
-			for (int i = 0; i < displacedVertices.Length; i++) {
-				UpdateVertexColor (transIn, i);
+		if(!GameStateController.Instance.paused){
+			if (transitioning) {
+				for (int i = 0; i < displacedVertices.Length; i++) {
+					UpdateVertexColor (transIn, i);
+				}
+				controllerI = (controllerI + 1);
+				} else {
+				for (int i = 0; i < displacedVertices.Length; i++) {
+					UpdateVertexColor (jumpNoise, i);
+				}
+				controllerI = (controllerI + 1) % jumpNoise.Length;
 			}
-			controllerI = (controllerI + 1);
-		} else {
-			for (int i = 0; i < displacedVertices.Length; i++) {
-				UpdateVertexColor (jumpNoise, i);
+			deformingMesh.vertices = currentVertices;
+			deformingMesh.RecalculateNormals();
+
+			if (controllerI == transIn.Length) {
+				transitioning = false;
+				controllerI = 0;
 			}
-			controllerI = (controllerI + 1) % jumpNoise.Length;
-		}
-		deformingMesh.vertices = currentVertices;
-		deformingMesh.RecalculateNormals();
 
-		if (controllerI == transIn.Length) {
-			transitioning = false;
-			controllerI = 0;
-		}
-
-		int j = 0;
-		for (int i = 0; i < extras.Length; i++) {
-			extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j] + new Vector3(0,-2f,0);
-			extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(glowTexOffset,0));
-			j ++;
-			//glowTexOffset = (glowTexOffset - 0.07f) % 1;
+			int j = 0;
+			for (int i = 0; i < extras.Length; i++) {
+				extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j] + new Vector3(0,-2f,0);
+				extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(glowTexOffset,0));
+				j ++;
+				//glowTexOffset = (glowTexOffset - 0.07f) % 1;
+			}
 		}
 	}
 
@@ -108,11 +110,11 @@ public class MeshControl : MonoBehaviour {
 		float tileL = Mathf.Round(Mathf.Sqrt (originalVertices.Length/2));
 		float tileW = tileL*2 - 1;
 		controllerImg = controllerImgs [controllerI];
-		Debug.Log (controllerImg.width + " " + controllerImg.height);
+		//Debug.Log (controllerImg.width + " " + controllerImg.height);
 		int x = Mathf.RoundToInt ((float)i % tileW / (tileW - 1) * controllerImg.width);
 		int y = Mathf.RoundToInt (i / 20.909f / tileL * controllerImg.height);
 		float colorVal = controllerImg.GetPixel (x, y).grayscale;
-		Debug.Log(i + " x: " + x + " y: " + y + " " + controllerImg.GetPixel (x, y));
+		//Debug.Log(i + " x: " + x + " y: " + y + " " + controllerImg.GetPixel (x, y));
 		currentVertices[i] = originalVertices[i] + new Vector3(0, 1*colorVal, 0);
 	}
 }
