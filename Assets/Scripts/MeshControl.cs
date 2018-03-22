@@ -55,10 +55,11 @@ public class MeshControl : MonoBehaviour {
 			float sphereRad = 0.2f;
 			sphere.transform.localScale = new Vector3 (sphereRad, sphereRad, sphereRad);
 			sphere.GetComponent<Renderer> ().material = gridTex;
-			sphere.transform.localPosition += new Vector3 (0,0,-4f);
+			sphere.transform.localPosition += new Vector3 (0,0,-2.7f);
 
+			Destroy(extras [i].GetComponent<Collider>());
 			extras [i].transform.SetParent(transform);
-			extras [i].transform.position = transform.position + originalVertices[j] + new Vector3(0,-20,0);
+			extras [i].transform.position = transform.position + originalVertices[j];
 			extras [i].transform.Rotate(90,0,0);
 			//extras [i].transform.localScale = new Vector3 (0, 0, 4f);
 			//float sphereRad = 0.03f;
@@ -96,7 +97,7 @@ public class MeshControl : MonoBehaviour {
 
 		int j = 0;
 		for (int i = 0; i < extras.Length; i++) {
-			extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j] + new Vector3(0,-3f,0);
+			extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j] + new Vector3(0,-2f,0);
 			extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(glowTexOffset,0));
 			j ++;
 			//glowTexOffset = (glowTexOffset - 0.07f) % 1;
@@ -105,9 +106,13 @@ public class MeshControl : MonoBehaviour {
 
 	void UpdateVertexColor(Texture2D[] controllerImgs, int i){
 		float tileL = Mathf.Round(Mathf.Sqrt (originalVertices.Length/2));
-		float tileW = tileL*2;
+		float tileW = tileL*2 - 1;
 		controllerImg = controllerImgs [controllerI];
-		float colorVal = controllerImg.GetPixel (Mathf.RoundToInt ((float)i % tileW / tileW * controllerImg.width), Mathf.RoundToInt (Mathf.Floor ((float)i / tileL) / tileL * controllerImg.height)).grayscale;
+		Debug.Log (controllerImg.width + " " + controllerImg.height);
+		int x = Mathf.RoundToInt ((float)i % tileW / (tileW - 1) * controllerImg.width);
+		int y = Mathf.RoundToInt (i / 20.909f / tileL * controllerImg.height);
+		float colorVal = controllerImg.GetPixel (x, y).grayscale;
+		Debug.Log(i + " x: " + x + " y: " + y + " " + controllerImg.GetPixel (x, y));
 		currentVertices[i] = originalVertices[i] + new Vector3(0, 1*colorVal, 0);
 	}
 }
