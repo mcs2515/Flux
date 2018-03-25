@@ -5224,7 +5224,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &647694039
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7015,7 +7015,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 13
-  drag: 0.2
   jumpforce: 13
   shakeDetectionThreshold: 0.8
   jumpDetectionThreshold: 3
