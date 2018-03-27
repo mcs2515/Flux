@@ -10,7 +10,7 @@ public class PlayerMove : MonoBehaviour {
     Camera controllerCamera;
 
     public float speed;
-    public float drag;
+    private float drag;
     public float jumpforce;
     float gravity = 9.5f;
 
@@ -22,11 +22,13 @@ public class PlayerMove : MonoBehaviour {
     public float jumpDetectionThreshold = 0f;
     float lowPassFilterFactor;
     private Vector3 lowPassValue;
+	private float timer;
 
     // Use this for initialization
     void Start () {
         controller = gameObject.GetComponent<CharacterController>();
         acceleration = Vector3.zero;
+		timer = 0f;
         //Debug.Log("start");
         lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
         shakeDetectionThreshold *= shakeDetectionThreshold;
@@ -41,11 +43,13 @@ public class PlayerMove : MonoBehaviour {
 
 		//accelerometer input is based on the rotation of the phone
 		if (!GameStateController.Instance.paused) {
+			Debug.Log (drag);
 			if (controller.isGrounded) {
 				acceleration = Input.acceleration;
 				lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
 				deltaAcceleration = acceleration - lowPassValue;
 
+				drag = .6f;
 				//Debug.Log("sqrt_delta_accel: " + deltaAcceleration.sqrMagnitude);
 				//Debug.Log("accleration: " + acceleration);
 				//Debug.Log("delta_accel: " + deltaAcceleration);
@@ -65,6 +69,8 @@ public class PlayerMove : MonoBehaviour {
 					moveDir = transform.TransformDirection (moveDir);
 					moveDir.y *= jumpforce;
 				}
+			} else {
+				drag = .3f;
 			}
 
 			//always ground the person
@@ -82,6 +88,28 @@ public class PlayerMove : MonoBehaviour {
 
 			moveDir = transform.TransformDirection (moveDir);
 			controller.Move (moveDir * Time.deltaTime);
+
+			//Debug.Log ("delta mag: " + deltaAcceleration.sqrMagnitude);
+			checkPlayer ();
+
+		}
+	}
+
+	void checkPlayer(){
+		//if player does not move for 5 seconds, pause game
+		timer += Time.deltaTime;
+		//Debug.Log (timer);
+		if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
+			
+			if (timer >= 3 && Mathf.Floor (timer) % 3 == 0) {
+				//check again
+				if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
+					GameStateController.Instance.Pause ();
+					timer = 0;
+				}
+			}
+		} else {
+			timer = 0;
 		}
 	}
 }
