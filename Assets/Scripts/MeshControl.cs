@@ -21,6 +21,7 @@ public class MeshControl : MonoBehaviour {
 	private int controllerI;
 	private float glowTexOffset;
 	bool transitioning;
+	bool start = false;
 
 	// Use this for initialization
 	void Start () {
@@ -76,33 +77,37 @@ public class MeshControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(!GameStateController.Instance.paused){
-			if (transitioning) {
-				for (int i = 0; i < displacedVertices.Length; i++) {
-					UpdateVertexColor (transIn, i);
-				}
-				controllerI = (controllerI + 1);
+		if (start) {
+			if (!GameStateController.Instance.paused) {
+				if (transitioning) {
+					for (int i = 0; i < displacedVertices.Length; i++) {
+						UpdateVertexColor (transIn, i);
+					}
+					controllerI = (controllerI + 1);
 				} else {
-				for (int i = 0; i < displacedVertices.Length; i++) {
-					UpdateVertexColor (jumpNoise, i);
+					for (int i = 0; i < displacedVertices.Length; i++) {
+						UpdateVertexColor (jumpNoise, i);
+					}
+					controllerI = (controllerI + 1) % jumpNoise.Length;
 				}
-				controllerI = (controllerI + 1) % jumpNoise.Length;
-			}
-			deformingMesh.vertices = currentVertices;
-			deformingMesh.RecalculateNormals();
+				deformingMesh.vertices = currentVertices;
+				deformingMesh.RecalculateNormals ();
 
-			if (controllerI == transIn.Length) {
-				transitioning = false;
-				controllerI = 0;
-			}
+				if (controllerI == transIn.Length) {
+					transitioning = false;
+					controllerI = 0;
+				}
 
-			int j = 0;
-			for (int i = 0; i < extras.Length; i++) {
-				extras [i].transform.position = transform.position + transform.localScale.x*currentVertices [j] + new Vector3(0,-2f,0);
-				extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2(glowTexOffset,0));
-				j ++;
-				//glowTexOffset = (glowTexOffset - 0.07f) % 1;
+				int j = 0;
+				for (int i = 0; i < extras.Length; i++) {
+					extras [i].transform.position = transform.position + transform.localScale.x * currentVertices [j] + new Vector3 (0, -2f, 0);
+					extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2 (glowTexOffset, 0));
+					j++;
+					//glowTexOffset = (glowTexOffset - 0.07f) % 1;
+				}
 			}
+		}else {
+			CheckStart ();
 		}
 	}
 
@@ -116,5 +121,11 @@ public class MeshControl : MonoBehaviour {
 		float colorVal = controllerImg.GetPixel (x, y).grayscale;
 		//Debug.Log(i + " x: " + x + " y: " + y + " " + controllerImg.GetPixel (x, y));
 		currentVertices[i] = originalVertices[i] + new Vector3(0, 1*colorVal, 0);
+	}
+
+	void CheckStart(){
+		if (Vector3.Distance(GameObject.Find ("Player").transform.position, transform.position) < 10.0f) {
+			start = true;
+		}
 	}
 }
