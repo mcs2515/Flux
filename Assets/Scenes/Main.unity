@@ -8547,7 +8547,7 @@ MonoBehaviour:
   speed: 13
   jumpforce: 13
   shakeDetectionThreshold: 0.8
-  jumpDetectionThreshold: 3
+  jumpDetectionThreshold: 5
 --- !u!143 &1513733899
 CharacterController:
   m_ObjectHideFlags: 0
