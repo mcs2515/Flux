@@ -56,7 +56,6 @@ public class GameStateController : MonoBehaviour {
 
 	public void PauseMenu(){
 		//show only pause screen
-		reset = false;
 		paused = true;
 		gamestate = GameState_e.PAUSE;
 
@@ -66,7 +65,6 @@ public class GameStateController : MonoBehaviour {
 
 	public void ResultMenu(){
 		//show only pause screen
-		reset = true;
 		paused = true;
 		gamestate = GameState_e.RESULT;
 

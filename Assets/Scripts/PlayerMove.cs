@@ -6,8 +6,12 @@ public class PlayerMove : MonoBehaviour {
 
 
     CharacterController controller;
+	GameObject player;
     Vector3 moveDir = Vector3.zero;
     Camera controllerCamera;
+
+	Vector3 start_position = Vector3.zero;
+	Vector3 start_rotation = Vector3.zero;
 
     public float speed;
     private float drag;
@@ -26,6 +30,11 @@ public class PlayerMove : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+		player = GameObject.Find ("Player");
+
+		start_position = new Vector3 (player.transform.position.x, player.transform.position.y, player.transform.position.z);
+		start_rotation = new Vector3 (player.transform.eulerAngles.x, player.transform.eulerAngles.y, player.transform.eulerAngles.z);
+
         controller = gameObject.GetComponent<CharacterController>();
         acceleration = Vector3.zero;
 		timer = 0f;
@@ -40,10 +49,14 @@ public class PlayerMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//reset game
+		if (GameStateController.Instance.reset) {
+			ResetPlayer ();
+		}
 
 		//accelerometer input is based on the rotation of the phone
 		if (!GameStateController.Instance.paused) {
-			Debug.Log (drag);
+			//Debug.Log (drag);
 			if (controller.isGrounded) {
 				acceleration = Input.acceleration;
 				lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
@@ -96,7 +109,7 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	void checkPlayer(){
-		//if player does not move for 5 seconds, pause game
+		//if player does not move, pause game
 		timer += Time.deltaTime;
 		//Debug.Log (timer);
 		if ((deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) && moveDir.z == 0) {
@@ -111,5 +124,10 @@ public class PlayerMove : MonoBehaviour {
 		} else {
 			timer = 0;
 		}
+	}
+
+	void ResetPlayer(){
+		player.transform.position = start_position;
+		player.transform.eulerAngles = start_rotation;
 	}
 }
