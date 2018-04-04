@@ -16,6 +16,7 @@ public class PlayerMove : MonoBehaviour {
     private float drag;
     public float jumpforce;
     float gravity = 9.5f;
+	private float delay;
 
     Vector3 acceleration;
     Vector3 deltaAcceleration;
@@ -36,6 +37,7 @@ public class PlayerMove : MonoBehaviour {
 
         controller = gameObject.GetComponent<CharacterController>();    
 		timer = 0f;
+		delay = 0f;
 
         lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
         shakeDetectionThreshold *= shakeDetectionThreshold;
@@ -47,22 +49,25 @@ public class PlayerMove : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		//Invoke ("PlayerMovement", 2);
-		/*if ((GameStateController.Instance.previous_state == GameState_e.PAUSE ||
-		    GameStateController.Instance.previous_state == GameState_e.START) &&
-		    GameStateController.Instance.next_state == GameState_e.GAME) {
-			Debug.Log ("delay start");
-			Invoke ("PlayerMovement", 1);
-			Debug.Log ("delay end");
-		} else {*/
-			//accelerometer input is based on the rotation of the phone
+
+		//play game
 		if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
+			//delay input if user is coming from pause or start menu
+			if (GameStateController.Instance.Delay_Input) {
+				delay += Time.deltaTime;
+				float seconds = Mathf.Floor (delay);
+
+				if (seconds >= .5f) {
+					GameStateController.Instance.Delay_Input = false;
+					delay = 0;
+				}
+			} 
+			else {
 				PlayerMovement ();
 			}
-		//}
-
+		}
 		//reset game
-		if (GameStateController.Instance.GetGameState() == GameState_e.START) {
+		else if (GameStateController.Instance.GetGameState() == GameState_e.START) {
 			ResetPlayer ();
 		}
 	}
@@ -94,7 +99,8 @@ public class PlayerMove : MonoBehaviour {
 				moveDir = transform.TransformDirection (moveDir);
 				moveDir.y *= jumpforce;
 			}
-		} else {
+		} 
+		else {
 			drag = .3f;
 		}
 
@@ -106,7 +112,8 @@ public class PlayerMove : MonoBehaviour {
 		if (moveDir.z > 0) {
 			moveDir.z -= drag;
 			//moveDir.x -= drag;
-		} else {
+		} 
+		else {
 			moveDir.z = 0;
 			//moveDir.x = 0;
 		}
@@ -114,14 +121,13 @@ public class PlayerMove : MonoBehaviour {
 		moveDir = transform.TransformDirection (moveDir);
 		controller.Move (moveDir * Time.deltaTime);
 
-		//Debug.Log ("delta mag: " + deltaAcceleration.sqrMagnitude);
 		CheckPlayer ();
 	}
 
 	void CheckPlayer(){
 		//if player does not move, pause game
 		timer += Time.deltaTime;
-		//Debug.Log (timer);
+
 		if ((deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) && moveDir.z == 0) {
 			if (timer >= 3 && Mathf.Floor (timer) % 3 == 0) {
 				//check again
@@ -130,8 +136,8 @@ public class PlayerMove : MonoBehaviour {
 					timer = 0;
 				}
 			}
-
-		} else {
+		} 
+		else {
 			timer = 0;
 		}
 	}

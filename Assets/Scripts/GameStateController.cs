@@ -17,23 +17,20 @@ public class GameStateController : MonoBehaviour {
 	public GameObject results_screen;
 
 	GameState_e gamestate;
-	public GameState_e previous_state;
-	public GameState_e next_state;
+	public bool delay_input;
 		
 	// Use this for initialization
 	void Start () {
 		gamestate = GameState_e.START;
-		previous_state = gamestate;
-		CheckGameState(gamestate);
-	}
-	
-	// Update is called once per frame
-	void Update () {
+		delay_input = true;
+
+		StartMenu();
 	}
 
 	public void StartMenu(){
 		//show only title screen
 		gamestate = GameState_e.START;
+		delay_input = true;
 
 		CheckGameState(gamestate);
 		Debug.Log ("start screen");
@@ -50,6 +47,7 @@ public class GameStateController : MonoBehaviour {
 	public void PauseMenu(){
 		//show only pause screen
 		gamestate = GameState_e.PAUSE;
+		delay_input = true;
 
 		CheckGameState(gamestate);
 		Debug.Log ("paused");
@@ -77,11 +75,15 @@ public class GameStateController : MonoBehaviour {
 		return gamestate;
 	}
 
+	public bool Delay_Input{
+		get{ return delay_input; }
+		set{ delay_input = value; }
+	}
+
 	void CheckGameState(GameState_e state){
 		pause_screen.SetActive(false);
 		results_screen.SetActive(false);
 		start_screen.SetActive(false);
-		next_state = state;
 
 		switch (state) {
 			case GameState_e.START:
@@ -97,10 +99,6 @@ public class GameStateController : MonoBehaviour {
 				break;
 		default:
 			break;
-
-			if (previous_state != state) {
-				previous_state = state;
-			}
 		}
 	}
 }
