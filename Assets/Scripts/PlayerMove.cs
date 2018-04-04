@@ -8,7 +8,6 @@ public class PlayerMove : MonoBehaviour {
     CharacterController controller;
 	GameObject player;
     Vector3 moveDir = Vector3.zero;
-    Camera controllerCamera;
 
 	Vector3 start_position = Vector3.zero;
 	Vector3 start_rotation = Vector3.zero;
@@ -35,80 +34,91 @@ public class PlayerMove : MonoBehaviour {
 		start_position = new Vector3 (player.transform.position.x, player.transform.position.y, player.transform.position.z);
 		start_rotation = new Vector3 (player.transform.eulerAngles.x, player.transform.eulerAngles.y, player.transform.eulerAngles.z);
 
-        controller = gameObject.GetComponent<CharacterController>();
-        acceleration = Vector3.zero;
+        controller = gameObject.GetComponent<CharacterController>();    
 		timer = 0f;
-        //Debug.Log("start");
+
         lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
         shakeDetectionThreshold *= shakeDetectionThreshold;
-        lowPassValue = Input.acceleration;
+		acceleration = Vector3.zero;
+		lowPassValue = Vector3.zero;
 
         Input.gyro.enabled = true;
-        controllerCamera = GameObject.Find("playerCamera").GetComponent<Camera>();
     }
-	
+
 	// Update is called once per frame
 	void Update () {
+		//Invoke ("PlayerMovement", 2);
+		/*if ((GameStateController.Instance.previous_state == GameState_e.PAUSE ||
+		    GameStateController.Instance.previous_state == GameState_e.START) &&
+		    GameStateController.Instance.next_state == GameState_e.GAME) {
+			Debug.Log ("delay start");
+			Invoke ("PlayerMovement", 1);
+			Debug.Log ("delay end");
+		} else {*/
+			//accelerometer input is based on the rotation of the phone
+		if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
+				PlayerMovement ();
+			}
+		//}
+
 		//reset game
-		if (GameStateController.Instance.reset) {
+		if (GameStateController.Instance.GetGameState() == GameState_e.START) {
 			ResetPlayer ();
-		}
-
-		//accelerometer input is based on the rotation of the phone
-		if (!GameStateController.Instance.paused) {
-			//Debug.Log (drag);
-			if (controller.isGrounded) {
-				acceleration = Input.acceleration;
-				lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
-				deltaAcceleration = acceleration - lowPassValue;
-
-				drag = .6f;
-				//Debug.Log("sqrt_delta_accel: " + deltaAcceleration.sqrMagnitude);
-				//Debug.Log("accleration: " + acceleration);
-				//Debug.Log("delta_accel: " + deltaAcceleration);
-
-				//rotate character and its camera based on accelerometer
-				controller.transform.Rotate (0, -Input.gyro.rotationRateUnbiased.y * 1.5f, 0);
-
-				//if moving
-				if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
-					moveDir = new Vector3 (0f, 0f, 1f);
-					moveDir *= speed;
-				}
-
-				//if jumping
-				if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold) {
-					moveDir = new Vector3 (0, 1f, moveDir.z * 1.5f);
-					moveDir = transform.TransformDirection (moveDir);
-					moveDir.y *= jumpforce;
-				}
-			} else {
-				drag = .3f;
-			}
-
-			//always ground the person
-			moveDir.y -= gravity * Time.deltaTime;
-			moveDir.x = 0;
-
-			//slow down player
-			if (moveDir.z > 0) {
-				moveDir.z -= drag;
-				//moveDir.x -= drag;
-			} else {
-				moveDir.z = 0;
-				//moveDir.x = 0;
-			}
-
-			moveDir = transform.TransformDirection (moveDir);
-			controller.Move (moveDir * Time.deltaTime);
-
-			//Debug.Log ("delta mag: " + deltaAcceleration.sqrMagnitude);
-			checkPlayer ();
-
 		}
 	}
 
-	void checkPlayer(){
+	void PlayerMovement(){
+		//Debug.Log (drag);
+		if (controller.isGrounded) {
+			acceleration = Input.acceleration;
+			lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
+			deltaAcceleration = acceleration - lowPassValue;
+
+			drag = .6f;
+			//Debug.Log("sqrt_delta_accel: " + deltaAcceleration.sqrMagnitude);
+			//Debug.Log("accleration: " + acceleration);
+			//Debug.Log("delta_accel: " + deltaAcceleration);
+
+			//rotate character and its camera based on accelerometer
+			//controller.transform.Rotate (0, -Input.gyro.rotationRateUnbiased.y * 1.5f, 0);
+
+			//if moving
+			if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
+				moveDir = new Vector3 (0f, 0f, 1f);
+				moveDir *= speed;
+			}
+
+			//if jumping
+			if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold) {
+				moveDir = new Vector3 (0, 1f, moveDir.z * 1.5f);
+				moveDir = transform.TransformDirection (moveDir);
+				moveDir.y *= jumpforce;
+			}
+		} else {
+			drag = .3f;
+		}
+
+		//always ground the person
+		moveDir.y -= gravity * Time.deltaTime;
+		moveDir.x = 0;
+
+		//slow down player
+		if (moveDir.z > 0) {
+			moveDir.z -= drag;
+			//moveDir.x -= drag;
+		} else {
+			moveDir.z = 0;
+			//moveDir.x = 0;
+		}
+
+		moveDir = transform.TransformDirection (moveDir);
+		controller.Move (moveDir * Time.deltaTime);
+
+		//Debug.Log ("delta mag: " + deltaAcceleration.sqrMagnitude);
+		CheckPlayer ();
+	}
+
+	void CheckPlayer(){
 		//if player does not move, pause game
 		timer += Time.deltaTime;
 		//Debug.Log (timer);

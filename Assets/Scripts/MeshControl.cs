@@ -78,7 +78,7 @@ public class MeshControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (start) {
-			if (!GameStateController.Instance.paused) {
+			if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
 				if (transitioning) {
 					for (int i = 0; i < displacedVertices.Length; i++) {
 						UpdateVertexColor (transIn, i);
