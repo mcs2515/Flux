@@ -70,7 +70,7 @@ public class MeshControl : MonoBehaviour {
 			extras [i].GetComponent<Renderer> ().material = glowTex;
 			j ++;
 
-			float texScale = 0.5f;
+			//float texScale = 0.5f;
 			//extras [i].GetComponent<Renderer> ().material.SetTextureScale ("_MainTex", new Vector2(1f, 0.1f));
 		}
 	}

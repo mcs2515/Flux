@@ -99,15 +99,15 @@ public class PlayerMove : MonoBehaviour {
 		//if player does not move for 5 seconds, pause game
 		timer += Time.deltaTime;
 		//Debug.Log (timer);
-		if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
-			
+		if ((deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) && moveDir.z == 0) {
 			if (timer >= 3 && Mathf.Floor (timer) % 3 == 0) {
 				//check again
 				if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
-					GameStateController.Instance.Pause ();
+					GameStateController.Instance.PauseMenu();
 					timer = 0;
 				}
 			}
+
 		} else {
 			timer = 0;
 		}
