@@ -45,7 +45,7 @@ public class GyroControls : MonoBehaviour {
 			Vector3 previousEulerAngles = transform.eulerAngles;
 			Vector3 gyroInput = -Input.gyro.rotationRateUnbiased;
 
-			Vector3 targetEulerAngles = previousEulerAngles + gyroInput * (Time.deltaTime / 2) * Mathf.Rad2Deg;
+			Vector3 targetEulerAngles = previousEulerAngles + gyroInput * (Time.deltaTime / 1.5f) * Mathf.Rad2Deg;
 			targetEulerAngles.x = 0.0f; // Only this line has been added
 			targetEulerAngles.z = 0.0f;
 
