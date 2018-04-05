@@ -664,7 +664,7 @@ PlayerSettings:
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
   cloudProjectId: ec3fe385-e0c8-4b7d-a983-5e63909dbc04
-  projectName: Flux (1)
+  projectName: Flux
   organizationId: mcs2515
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
