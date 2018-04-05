@@ -132,7 +132,7 @@ public class PlayerMove : MonoBehaviour {
 			if (timer >= 3 && Mathf.Floor (timer) % 3 == 0) {
 				//check again
 				if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
-					GameStateController.Instance.PauseMenu();
+					//TODO: insert  warning text here
 					timer = 0;
 				}
 			}

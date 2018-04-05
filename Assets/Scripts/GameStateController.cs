@@ -14,6 +14,7 @@ public class GameStateController : MonoBehaviour {
 	static GameStateController instance;
 	public GameObject pause_screen;
 	public GameObject start_screen;
+	public GameObject game_screen;
 	public GameObject results_screen;
 
 	GameState_e gamestate;
@@ -84,12 +85,14 @@ public class GameStateController : MonoBehaviour {
 		pause_screen.SetActive(false);
 		results_screen.SetActive(false);
 		start_screen.SetActive(false);
+		game_screen.SetActive (false);
 
 		switch (state) {
 			case GameState_e.START:
 				start_screen.SetActive(true);
 				break;
 			case GameState_e.GAME:
+				game_screen.SetActive (true);
 				break;
 			case GameState_e.PAUSE:
 				pause_screen.SetActive (true);
