@@ -21,69 +21,79 @@ public class MeshControl : MonoBehaviour {
 	private int controllerI;
 	private float glowTexOffset;
 	bool transitioning;
+    Object[] transInObjs, jumpNoiseObjs;
+    Vector3 hideFire;
 	bool start = false;
 
 	// Use this for initialization
-	void Start () {
-		//assign all variables
-		deformingMesh = GetComponent<MeshFilter>().mesh;
-		originalVertices = deformingMesh.vertices;
-		displacedVertices = new Vector3[originalVertices.Length];
-		currentVertices = new Vector3[originalVertices.Length];
-		extras = new GameObject[Mathf.RoundToInt((float)originalVertices.Length)];
-		transitioning = true;
-		glowTexOffset = 0.016129f;
+	void Start ()
+    {
+        //assign all variables
+        glowTexOffset = 0.016129f;
 
-		Object[] transInObjs = Resources.LoadAll("jumpTransition/", typeof(Texture2D));
-		Object[] jumpNoiseObjs = Resources.LoadAll("jumpNoise/", typeof(Texture2D));
-		transIn = new Texture2D[transInObjs.Length];
-		for (int i = 0; i < transInObjs.Length; i++) {
-			transIn [i] = (Texture2D) transInObjs [i];
-		}
-		jumpNoise = new Texture2D[jumpNoiseObjs.Length];
-		for (int i = 0; i < jumpNoiseObjs.Length; i++) {
-			jumpNoise [i] = (Texture2D) jumpNoiseObjs [i];
-		}
-		controllerI = 0;
+        deformingMesh = GetComponent<MeshFilter>().mesh;
+        originalVertices = deformingMesh.vertices;
+        displacedVertices = new Vector3[originalVertices.Length];
+        currentVertices = new Vector3[originalVertices.Length];
+        extras = new GameObject[Mathf.RoundToInt((float)originalVertices.Length)];
 
+        transInObjs = Resources.LoadAll("jumpTransition/", typeof(Texture2D));
+        jumpNoiseObjs = Resources.LoadAll("jumpNoise/", typeof(Texture2D));
 
-		int j = 0;
-		for (int i = 0; i < originalVertices.Length; i++) {
-			extras [i] = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        int j = 0;
+        for (int i = 0; i < originalVertices.Length; i++)
+        {
+            extras[i] = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            Destroy(extras[i].GetComponent<Collider>());
 
-			GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			sphere.transform.SetParent (extras[i].transform);
-			float sphereRad = 0.2f;
-			sphere.transform.localScale = new Vector3 (sphereRad, sphereRad, sphereRad);
-			sphere.GetComponent<Renderer> ().material = gridTex;
-			sphere.transform.localPosition += new Vector3 (0,0,-2.7f);
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.transform.SetParent(extras[i].transform);
+            float sphereRad = 0.2f;
+            sphere.transform.localScale = new Vector3(sphereRad, sphereRad, sphereRad);
+            sphere.GetComponent<Renderer>().material = gridTex;
+            Destroy(sphere.GetComponent<Collider>());
 
-			Destroy(extras [i].GetComponent<Collider>());
-			extras [i].transform.SetParent(transform);
-			extras [i].transform.position = transform.position + originalVertices[j];
-			extras [i].transform.Rotate(90,0,0);
-			//extras [i].transform.localScale = new Vector3 (0, 0, 4f);
-			//float sphereRad = 0.03f;
-			float extraRad = 0.1f;
-			extras [i].transform.localScale = new Vector3 (extraRad, extraRad, extraRad);
+            extras[i].transform.SetParent(transform);
+            extras[i].transform.Rotate(90, 0, 0);
+            //extras [i].transform.localScale = new Vector3 (0, 0, 4f);
+            //float sphereRad = 0.03f;
+            float extraRad = 0.1f;
+            extras[i].transform.localScale = new Vector3(extraRad, extraRad, extraRad);
 
-			extras [i].GetComponent<Renderer> ().material = glowTex;
-			j ++;
+            extras[i].GetComponent<Renderer>().material = glowTex;
+            j++;
 
-			//float texScale = 0.5f;
-			//extras [i].GetComponent<Renderer> ().material.SetTextureScale ("_MainTex", new Vector2(1f, 0.1f));
-		}
-	}
+            //float texScale = 0.5f;
+            //extras [i].GetComponent<Renderer> ().material.SetTextureScale ("_MainTex", new Vector2(1f, 0.1f));
+        }
+
+        Restart();
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		if (start) {
-			if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
+            //if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
+
+                int j = 0;
+			    for (int i = 0; i < extras.Length; i++) {
+					extras [i].transform.position = transform.position + transform.localScale.x * currentVertices [j] + new Vector3 (0, -2f, 0);
+					extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2 (glowTexOffset, 0));
+					j++;
+                    //glowTexOffset = (glowTexOffset - 0.07f) % 1;
+                }
 				if (transitioning) {
-					for (int i = 0; i < displacedVertices.Length; i++) {
-						UpdateVertexColor (transIn, i);
-					}
+                    for (int i = 0; i < displacedVertices.Length; i++)
+                    {
+                        UpdateVertexColor(transIn, i);
+                        extras[i].transform.position += hideFire;
+                        extras[i].transform.Find("Sphere").transform.localPosition = new Vector3(0f, 0 - hideFire.y, -2.7f);
+                    }
 					controllerI = (controllerI + 1);
+                    if(hideFire.y < 0) {
+                        hideFire += new Vector3(0, 0.12f, 0);
+                    }
+                    
 				} else {
 					for (int i = 0; i < displacedVertices.Length; i++) {
 						UpdateVertexColor (jumpNoise, i);
@@ -98,18 +108,42 @@ public class MeshControl : MonoBehaviour {
 					controllerI = 0;
 				}
 
-				int j = 0;
-				for (int i = 0; i < extras.Length; i++) {
-					extras [i].transform.position = transform.position + transform.localScale.x * currentVertices [j] + new Vector3 (0, -2f, 0);
-					extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2 (glowTexOffset, 0));
-					j++;
-					//glowTexOffset = (glowTexOffset - 0.07f) % 1;
-				}
-			}
+			//}
 		}else {
-			CheckStart ();
+			//CheckStart ();
+            start = true;
 		}
 	}
+
+    void Restart()
+    {
+        transitioning = true;
+
+        
+        transIn = new Texture2D[transInObjs.Length];
+        for (int i = 0; i < transInObjs.Length; i++)
+        {
+            transIn[i] = (Texture2D)transInObjs[i];
+        }
+        jumpNoise = new Texture2D[jumpNoiseObjs.Length];
+        for (int i = 0; i < jumpNoiseObjs.Length; i++)
+        {
+            jumpNoise[i] = (Texture2D)jumpNoiseObjs[i];
+        }
+        controllerI = 0;
+
+
+        int j = 0;
+        for (int i = 0; i < originalVertices.Length; i++)
+        {
+            extras[i].transform.position = transform.position + originalVertices[j] + hideFire;
+            extras[i].transform.Find("Sphere").transform.localPosition += new Vector3(0, 0, -2.7f);
+
+        }
+
+        hideFire = new Vector3(0f, -6f, 0f);
+
+    }
 
 	void UpdateVertexColor(Texture2D[] controllerImgs, int i){
 		float tileL = Mathf.Round(Mathf.Sqrt (originalVertices.Length/2));
