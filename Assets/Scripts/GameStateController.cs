@@ -22,6 +22,7 @@ public class GameStateController : MonoBehaviour {
 		
 	// Use this for initialization
 	void Start () {
+		Screen.sleepTimeout = (int)SleepTimeout.NeverSleep;
 		gamestate = GameState_e.START;
 		delay_input = true;
 
