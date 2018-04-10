@@ -5,6 +5,7 @@ using UnityEngine;
 public class Timer : MonoBehaviour {
 
 	public TextMeshProUGUI timerText;
+	public TextMeshProUGUI resultTimer;
 	int minutes;
 	int seconds;
 	float timer;
@@ -30,5 +31,6 @@ public class Timer : MonoBehaviour {
 
 		string time = minutes.ToString ("00") + ":" + seconds.ToString ("00");
 		timerText.SetText (time);
+		resultTimer.SetText (time);
 	}
 }

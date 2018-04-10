@@ -129,7 +129,7 @@ public class PlayerMove : MonoBehaviour {
 		timer += Time.deltaTime;
 
 		if ((deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) && moveDir.z == 0) {
-			if (timer >= 3 && Mathf.Floor (timer) % 3 == 0) {
+			if (timer >= 10) {
 				//check again
 				if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
 					//TODO: insert  warning text here
