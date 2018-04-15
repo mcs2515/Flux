@@ -16,6 +16,8 @@ public class GameStateController : MonoBehaviour {
 	public GameObject start_screen;
 	public GameObject game_screen;
 	public GameObject results_screen;
+	public GameObject results_background;
+	public GameObject canvas;
 
 	GameState_e gamestate;
 	public bool delay_input;
@@ -25,6 +27,10 @@ public class GameStateController : MonoBehaviour {
 		Screen.sleepTimeout = (int)SleepTimeout.NeverSleep;
 		gamestate = GameState_e.START;
 		delay_input = true;
+
+		if (canvas) {
+			canvas.SetActive (true);
+		}
 
 		StartMenu();
 	}
@@ -87,6 +93,7 @@ public class GameStateController : MonoBehaviour {
 		results_screen.SetActive(false);
 		start_screen.SetActive(false);
 		game_screen.SetActive (false);
+		results_background.SetActive (false);
 
 		switch (state) {
 			case GameState_e.START:
@@ -100,9 +107,14 @@ public class GameStateController : MonoBehaviour {
 				break;
 			case GameState_e.RESULT:
 				results_screen.SetActive(true);
+				results_background.SetActive (true);
 				break;
 		default:
 			break;
 		}
+	}
+
+	public void Vibrate(){
+		Handheld.Vibrate ();
 	}
 }
