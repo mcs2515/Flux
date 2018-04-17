@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.19927624, g: 0.8361484, b: 0.9174594, a: 1}
+  m_IndirectSpecularColor: {r: 0.19941762, g: 0.8361439, b: 0.9174424, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1402,6 +1402,8 @@ MonoBehaviour:
   start_screen: {fileID: 1419003092}
   game_screen: {fileID: 0}
   results_screen: {fileID: 301842419}
+  results_background: {fileID: 0}
+  canvas: {fileID: 0}
   delay_input: 0
 --- !u!1 &154424051
 GameObject:
@@ -21789,6 +21791,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1890854261}
   - component: {fileID: 1890854260}
+  - component: {fileID: 1890854262}
   m_Layer: 0
   m_Name: BoxObstacle
   m_TagString: Untagged
@@ -21833,6 +21836,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1890854262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1890854259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d793b0d6db3a3a46b375d9504c2d517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
 --- !u!1 &1891781927
 GameObject:
   m_ObjectHideFlags: 0
