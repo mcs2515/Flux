@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DisplayGifs : MonoBehaviour {
+public class DetectObstacles : MonoBehaviour {
 
 	public GameObject jump_sprite;
 	public GameObject[] obstacles;
 	GameObject obj_near;
+	public PlayerMove playerScript;
+	bool collided;
 
 	public CharacterController controller;
 	// Use this for initialization
@@ -20,6 +22,11 @@ public class DisplayGifs : MonoBehaviour {
 		if (GameStateController.Instance.GetGameState () == GameState_e.GAME) {
 			obj_near = FindNearestObj ();
 			Display_Jump (obj_near);
+			collided = IsColliding (obj_near);
+
+			/*if (IsColliding (obj_near)) {
+				playerScript.Lives--;
+			}*/
 		} else {
 			jump_sprite.SetActive (false);
 		}
@@ -43,5 +50,18 @@ public class DisplayGifs : MonoBehaviour {
 				jump_sprite.SetActive (false);
 			}
 		}
+	}
+
+	public GameObject GetNearestObj(){
+		return obj_near;
+	}
+
+	public bool IsColliding(GameObject obj){
+		if (obj) {
+			if ((controller.transform.position - obj.transform.position).magnitude <= 5f) {
+				return true;
+			} 
+		}
+		return false;
 	}
 }

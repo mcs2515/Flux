@@ -8,6 +8,7 @@ public class PlayerMove : MonoBehaviour {
     CharacterController controller;
 	GameObject player;
     Vector3 moveDir = Vector3.zero;
+	int lives;
 
 	Vector3 start_position = Vector3.zero;
 	Vector3 start_rotation = Vector3.zero;
@@ -111,11 +112,9 @@ public class PlayerMove : MonoBehaviour {
 		//slow down player
 		if (moveDir.z > 0) {
 			moveDir.z -= drag;
-			//moveDir.x -= drag;
 		} 
 		else {
 			moveDir.z = 0;
-			//moveDir.x = 0;
 		}
 
 		moveDir = transform.TransformDirection (moveDir);
@@ -145,5 +144,11 @@ public class PlayerMove : MonoBehaviour {
 	void ResetPlayer(){
 		player.transform.position = start_position;
 		player.transform.eulerAngles = start_rotation;
+		lives = 2;
 	}
+
+	public int Lives{
+		get{return lives;}
+		set{lives=value;}
+	}	
 }
