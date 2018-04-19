@@ -31,7 +31,6 @@ public class DetectObstacles : MonoBehaviour {
 			//if colliding
 			if (IsColliding (obj_near)) {
 
-				//playerScript.IsColliding = IsColliding (obj_near);
 				timer += Time.deltaTime;
 
 				damage_screen.SetActive (true);

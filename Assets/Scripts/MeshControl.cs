@@ -73,7 +73,7 @@ public class MeshControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (start) {
-            //if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
+            if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
 
                 int j = 0;
 			    for (int i = 0; i < extras.Length; i++) {
@@ -107,11 +107,10 @@ public class MeshControl : MonoBehaviour {
 					transitioning = false;
 					controllerI = 0;
 				}
-
-			//}
+			}
 		}else {
-			//CheckStart ();
-            start = true;
+			CheckStart ();
+            //start = true;
 		}
 	}
 
