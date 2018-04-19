@@ -7,7 +7,7 @@ public class Sun : MonoBehaviour {
     float distance_z = 490;
 	float distance_x =  1.3f;
     GameObject player;
-	Vector3 sun_position = Vector3.zero;
+	//Vector3 sun_position = Vector3.zero;
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +24,7 @@ public class Sun : MonoBehaviour {
 		Vector3 current_position = transform.position;
 
 		current_position.z = player.transform.position.z + distance_z;
-		current_position.x = player.transform.position.x + distance_x;
+		//current_position.x = player.transform.position.x + distance_x;
 
 		transform.position = current_position;
     }

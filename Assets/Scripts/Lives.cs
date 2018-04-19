@@ -45,8 +45,8 @@ public class Lives : MonoBehaviour {
 			health1.SetActive (true);
 			break;
 		case 1:
+			health1.SetActive (true);
 			health2.SetActive (true);
-			health3.SetActive (true);
 			break;
 		case 2:
 			health1.SetActive (true);

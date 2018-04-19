@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.19838122, g: 0.8361466, b: 0.9158726, a: 1}
+  m_IndirectSpecularColor: {r: 0.19918427, g: 0.8360527, b: 0.91731036, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -4663,6 +4663,79 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1086821612}
+--- !u!1 &1114440554
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1114440556}
+  - component: {fileID: 1114440555}
+  m_Layer: 0
+  m_Name: Damage_Overlay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!212 &1114440555
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1114440554}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Color: {r: 0.7794118, g: 0.1260813, b: 0.1260813, a: 0.253}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 1
+  m_Size: {x: 1.28, y: 1.28}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 2
+--- !u!4 &1114440556
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1114440554}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.12, y: 1.17, z: 1.9100002}
+  m_LocalScale: {x: 4.3119535, y: 2.8783767, z: 23.027014}
+  m_Children: []
+  m_Father: {fileID: 1513733903}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1133685331
 GameObject:
   m_ObjectHideFlags: 0
@@ -6235,7 +6308,6 @@ GameObject:
   - component: {fileID: 1513733899}
   - component: {fileID: 1513733898}
   - component: {fileID: 1513733904}
-  - component: {fileID: 1513733905}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6342,6 +6414,7 @@ Transform:
   - {fileID: 344591524}
   - {fileID: 1311658873}
   - {fileID: 1682304231}
+  - {fileID: 1114440556}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6356,21 +6429,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22828fcc4c5b9e142a64b5b0fde89187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &1513733905
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1513733897}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1575902951
 GameObject:
   m_ObjectHideFlags: 0
@@ -7283,6 +7341,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jump_sprite: {fileID: 1311658870}
   obstacles: []
+  damage_screen: {fileID: 1114440554}
+  playerScript: {fileID: 1513733898}
   controller: {fileID: 1513733899}
 --- !u!1 &1816928273
 GameObject:

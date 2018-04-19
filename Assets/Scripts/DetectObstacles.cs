@@ -6,15 +6,20 @@ public class DetectObstacles : MonoBehaviour {
 
 	public GameObject jump_sprite;
 	public GameObject[] obstacles;
+	public GameObject damage_screen;
 	GameObject obj_near;
 	public PlayerMove playerScript;
-	bool collided;
+	float timer;
+	int counter;
 
 	public CharacterController controller;
 	// Use this for initialization
 	void Start () {
 		obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 		jump_sprite.SetActive (false);
+		damage_screen.SetActive (false);
+		timer = 0;
+		counter = 0;
 	}
 
 	// Update is called once per frame
@@ -22,13 +27,44 @@ public class DetectObstacles : MonoBehaviour {
 		if (GameStateController.Instance.GetGameState () == GameState_e.GAME) {
 			obj_near = FindNearestObj ();
 			Display_Jump (obj_near);
-			collided = IsColliding (obj_near);
 
-			/*if (IsColliding (obj_near)) {
-				playerScript.Lives--;
-			}*/
-		} else {
+			//if colliding
+			if (IsColliding (obj_near)) {
+
+				//playerScript.IsColliding = IsColliding (obj_near);
+				timer += Time.deltaTime;
+
+				damage_screen.SetActive (true);
+
+				if (counter == 0) {
+					playerScript.Lives--;
+					counter++;
+				}
+
+				if (timer >= .5f) {
+					damage_screen.SetActive (false);
+				}
+
+				if (timer >= 2.0f) {
+					counter = 0;
+					timer = 0;
+				}
+			} 
+			//if not currently colliding
+			else {
+				counter = 0;
+				timer = 0;
+				damage_screen.SetActive (false);
+			}
+		} 
+		else {
 			jump_sprite.SetActive (false);
+			damage_screen.SetActive (false);
+		}
+
+		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
+			timer = 0;
+			counter = 0;
 		}
 	}
 
