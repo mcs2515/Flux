@@ -30,6 +30,7 @@ public class MeshControl : MonoBehaviour {
     {
         //assign all variables
         glowTexOffset = 0.016129f;
+		controllerI = 0;
 
         deformingMesh = GetComponent<MeshFilter>().mesh;
         originalVertices = deformingMesh.vertices;
@@ -44,7 +45,7 @@ public class MeshControl : MonoBehaviour {
         for (int i = 0; i < originalVertices.Length; i++)
         {
             extras[i] = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            Destroy(extras[i].GetComponent<Collider>());
+			Destroy(extras[i].GetComponent<Collider>());
 
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.SetParent(extras[i].transform);
@@ -57,10 +58,10 @@ public class MeshControl : MonoBehaviour {
             extras[i].transform.Rotate(90, 0, 0);
             //extras [i].transform.localScale = new Vector3 (0, 0, 4f);
             //float sphereRad = 0.03f;
-            float extraRad = 0.1f;
-            extras[i].transform.localScale = new Vector3(extraRad, extraRad, extraRad);
+			float extraRad = 0.1f;
+			extras[i].transform.localScale = new Vector3(extraRad, extraRad, extraRad);
 
-            extras[i].GetComponent<Renderer>().material = glowTex;
+			extras[i].GetComponent<Renderer>().material = glowTex;
             j++;
 
             //float texScale = 0.5f;
@@ -76,9 +77,10 @@ public class MeshControl : MonoBehaviour {
             if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
 
                 int j = 0;
-			    for (int i = 0; i < extras.Length; i++) {
+				for (int i = 0; i < extras.Length; i++) {
 					extras [i].transform.position = transform.position + transform.localScale.x * currentVertices [j] + new Vector3 (0, -2f, 0);
 					extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2 (glowTexOffset, 0));
+					Debug.Log (currentVertices[j]);
 					j++;
                     //glowTexOffset = (glowTexOffset - 0.07f) % 1;
                 }
@@ -131,16 +133,16 @@ public class MeshControl : MonoBehaviour {
         }
         controllerI = 0;
 
+		hideFire = new Vector3(0f, -6f, 0f);
 
         int j = 0;
         for (int i = 0; i < originalVertices.Length; i++)
         {
             extras[i].transform.position = transform.position + originalVertices[j] + hideFire;
             extras[i].transform.Find("Sphere").transform.localPosition += new Vector3(0, 0, -2.7f);
-
+			Debug.Log ("restart pos " + extras [i].transform.position);
         }
 
-        hideFire = new Vector3(0f, -6f, 0f);
 
     }
 
