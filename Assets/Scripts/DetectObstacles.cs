@@ -7,6 +7,11 @@ public class DetectObstacles : MonoBehaviour {
 	public GameObject jump_sprite;
 	public GameObject[] obstacles;
 	public GameObject damage_screen;
+	public Material skybox;
+	Color skyDayColor = new Color(60/255, 76/255, 84/255, 1);
+	Color skyDmgColor = new Color(189/255, 57/255, 60/255, 1);
+
+
 	GameObject obj_near;
 	public PlayerMove playerScript;
 	float timer;
@@ -16,6 +21,7 @@ public class DetectObstacles : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+		skybox.SetColor("_TintColor", skyDayColor);
 		jump_sprite.SetActive (false);
 		damage_screen.SetActive (false);
 		timer = 0;
@@ -34,6 +40,7 @@ public class DetectObstacles : MonoBehaviour {
 				timer += Time.deltaTime;
 
 				damage_screen.SetActive (true);
+				//skybox.SetColor("_TintColor", skyDmgColor);
 
 				if (counter == 0) {
 					playerScript.Lives--;
@@ -42,9 +49,10 @@ public class DetectObstacles : MonoBehaviour {
 
 				if (timer >= .5f) {
 					damage_screen.SetActive (false);
+					//skybox.SetColor("_TintColor", skyDayColor);
 				}
 
-				if (timer >= 2.0f) {
+				if (timer >= 3.0f) {
 					counter = 0;
 					timer = 0;
 				}
@@ -62,6 +70,7 @@ public class DetectObstacles : MonoBehaviour {
 		}
 
 		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
+			skybox.SetColor("_TintColor", skyDayColor);
 			timer = 0;
 			counter = 0;
 		}

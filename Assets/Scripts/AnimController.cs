@@ -17,7 +17,7 @@ public class AnimController : MonoBehaviour {
 	}
 
 	void CheckStart(){
-		if (Vector3.Distance(GameObject.Find ("Player").transform.position, transform.position) < 80.0f) {
+		if (Vector3.Distance(GameObject.Find ("Player").transform.position, transform.position) < 100.0f) {
 			anim.SetTrigger ("startAnim");
 		}
 	}
