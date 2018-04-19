@@ -23,7 +23,7 @@ public class DetectObstacles : MonoBehaviour {
 		obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 		skybox.SetColor("_TintColor", skyDayColor);
 		jump_sprite.SetActive (false);
-		damage_screen.SetActive (false);
+		//damage_screen.SetActive (false);
 		timer = 0;
 		counter = 0;
 	}
@@ -39,8 +39,8 @@ public class DetectObstacles : MonoBehaviour {
 
 				timer += Time.deltaTime;
 
-				damage_screen.SetActive (true);
-				//skybox.SetColor("_TintColor", skyDmgColor);
+				//damage_screen.SetActive (true);
+				skybox.SetColor("_TintColor", skyDmgColor);
 
 				if (counter == 0) {
 					playerScript.Lives--;
@@ -48,8 +48,8 @@ public class DetectObstacles : MonoBehaviour {
 				}
 
 				if (timer >= .5f) {
-					damage_screen.SetActive (false);
-					//skybox.SetColor("_TintColor", skyDayColor);
+					//damage_screen.SetActive (false);
+					skybox.SetColor("_TintColor", skyDayColor);
 				}
 
 				if (timer >= 3.0f) {
@@ -61,12 +61,12 @@ public class DetectObstacles : MonoBehaviour {
 			else {
 				counter = 0;
 				timer = 0;
-				damage_screen.SetActive (false);
+				//damage_screen.SetActive (false);
 			}
 		} 
 		else {
 			jump_sprite.SetActive (false);
-			damage_screen.SetActive (false);
+			//damage_screen.SetActive (false);
 		}
 
 		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
