@@ -80,7 +80,7 @@ public class MeshControl : MonoBehaviour {
 				for (int i = 0; i < extras.Length; i++) {
 					extras [i].transform.position = transform.position + transform.localScale.x * currentVertices [j] + new Vector3 (0, -2f, 0);
 					extras [i].GetComponent<Renderer> ().material.SetTextureOffset ("_MainTex", new Vector2 (glowTexOffset, 0));
-					Debug.Log (currentVertices[j]);
+					//Debug.Log (currentVertices[j]);
 					j++;
                     //glowTexOffset = (glowTexOffset - 0.07f) % 1;
                 }
@@ -140,7 +140,7 @@ public class MeshControl : MonoBehaviour {
         {
             extras[i].transform.position = transform.position + originalVertices[j] + hideFire;
             extras[i].transform.Find("Sphere").transform.localPosition += new Vector3(0, 0, -2.7f);
-			Debug.Log ("restart pos " + extras [i].transform.position);
+			//Debug.Log ("restart pos " + extras [i].transform.position);
         }
 
 
