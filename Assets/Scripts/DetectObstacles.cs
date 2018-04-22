@@ -10,13 +10,13 @@ public class DetectObstacles : MonoBehaviour {
 	public Material skybox;
 	//Color skyDayColor = new Color(.234f, .297331f, .328f, 1);
 	Color skyDayColor = new Color(60f/255f, 76f/255f, 84f/255f, 1);
-	Color skyDmgColor = new Color(189f/255f, 57f/255f, 60f/255f, 1);
-
+	Color skyDmgColor = new Color(197f/255f, 23f/255f, 30f/255f, 1);
 
 	GameObject obj_near;
 	public PlayerMove playerScript;
 	float timer;
 	int counter;
+	float skyLerp;
 
 	public CharacterController controller;
 	// Use this for initialization
@@ -31,10 +31,12 @@ public class DetectObstacles : MonoBehaviour {
 		//damage_screen.SetActive (false);
 		timer = 0;
 		counter = 0;
+		skyLerp = 0;
 	}
 
 	// Update is called once per frame
 	void Update () {
+		
 		if (GameStateController.Instance.GetGameState () == GameState_e.GAME) {
 			obj_near = FindNearestObj ();
 			Display_Jump (obj_near);
@@ -43,19 +45,24 @@ public class DetectObstacles : MonoBehaviour {
 			if (IsColliding (obj_near)) {
 
 				timer += Time.deltaTime;
+				skyLerp += Time.deltaTime/2f;
+
+
+				if (skyLerp > 1f) {
+					skyLerp = 1f;
+				}
+					
+				//damage_screen.SetActive (true);
+				skybox.SetColor("_Tint", Color.Lerp(skyDayColor,skyDmgColor, skyLerp));
+				RenderSettings.skybox = skybox;
 
 				if (counter == 0) {
 					playerScript.Lives--;
-					skybox.SetColor("_Tint", Color.Lerp(skyDayColor, skyDmgColor,  1f));
-					RenderSettings.skybox = skybox;
-
 					counter++;
 				}
 
 				/*if (timer >= .5f) {
 					//damage_screen.SetActive (false);
-					skybox.SetColor("_Tint", skyDayColor);
-					RenderSettings.skybox = skybox;
 				}*/
 
 				if (timer >= 3.0f) {
@@ -67,7 +74,13 @@ public class DetectObstacles : MonoBehaviour {
 			else {
 				counter = 0;
 				timer = 0;
-				skybox.SetColor("_Tint", skyDayColor);
+				skyLerp -= Time.deltaTime;
+
+				if (skyLerp < 0) {
+					skyLerp = 0;
+				}
+
+				skybox.SetColor("_Tint", Color.Lerp(skyDayColor, skyDmgColor,skyLerp));
 				RenderSettings.skybox = skybox;
 				//damage_screen.SetActive (false);
 			}
@@ -82,6 +95,7 @@ public class DetectObstacles : MonoBehaviour {
 		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
 			timer = 0;
 			counter = 0;
+			skyLerp = 0;
 		}
 	}
 
