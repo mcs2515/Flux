@@ -11,36 +11,12 @@ public class GyroControls : MonoBehaviour {
 
     private void Start()
     {
-        //cameraContainer = new GameObject("Camera Container");
-        //cameraContainer.transform.position = transform.position;
-        //transform.SetParent(cameraContainer.transform);
-        //gyroEnabled = EnableGryo();
-
 		gyro = Input.gyro;
 		gyro.enabled = true;
     }
 
-    /*private bool EnableGryo()
-    {
-        if(SystemInfo.supportsGyroscope)
-        {
-            gyro = Input.gyro;
-            gyro.enabled = true;
-            cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
-            rotation = new Quaternion(0, 0, 1, 0);
-
-            return true;
-        }
-
-        return false;
-    }*/
-
     private void Update()
     {
-        /*if (gyroEnabled)
-        {
-            transform.localRotation = gyro.attitude * rotation;
-        }*/
 		if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
 			Vector3 previousEulerAngles = transform.eulerAngles;
 			Vector3 gyroInput = -Input.gyro.rotationRateUnbiased;
@@ -49,16 +25,35 @@ public class GyroControls : MonoBehaviour {
 			targetEulerAngles.x = 0.0f;
 			targetEulerAngles.z = 0.0f;
 
-
-			if (targetEulerAngles.y < 180) {
-				transform.eulerAngles = new targetEulerAngles;
-				Mathf.Clamp (targetEulerAngles.y, 0f, 75f);
-			} else {
-				Mathf.Clamp (targetEulerAngles.y-360f, -65f, 0f);
-			}
-
-			transform.eulerAngles = targetEulerAngles;
+			transform.eulerAngles = new Vector3(targetEulerAngles.x, ClampAngle(targetEulerAngles.y, -60f, 60f),  targetEulerAngles.z);
 		}
+    }
+
+	//reference https://forum.unity.com/threads/limiting-rotation-with-mathf-clamp.171294/ 
+	static float ClampAngle(float angle, float min, float max)
+    {
+        if (min < 0 && max > 0 && (angle > max || angle < min))
+        {
+            angle -= 360;
+            if (angle > max || angle < min)
+            {
+                if (Mathf.Abs(Mathf.DeltaAngle(angle, min)) < Mathf.Abs(Mathf.DeltaAngle(angle, max))) return min;
+                else return max;
+            }
+        }
+        else if(min > 0 && (angle > max || angle < min))
+        {
+            angle += 360;
+            if (angle > max || angle < min)
+            {
+                if (Mathf.Abs(Mathf.DeltaAngle(angle, min)) < Mathf.Abs(Mathf.DeltaAngle(angle, max))) return min;
+                else return max;
+            }
+        }
+ 
+        if (angle < min) return min;
+        else if (angle > max) return max;
+        else return angle;
     }
 
 }
