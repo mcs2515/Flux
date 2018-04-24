@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerState_e{
+	STANBY,
+	JUMP,
+	RUNNING,
+	MISS,
+}
+
 public class PlayerMove : MonoBehaviour {
 
-
+	PlayerState_e playerState = PlayerState_e.STANBY;
     CharacterController controller;
 	GameObject player;
     Vector3 moveDir = Vector3.zero;
@@ -76,9 +83,11 @@ public class PlayerMove : MonoBehaviour {
 	void PlayerMovement(){
 		//Debug.Log (drag);
 		if (controller.isGrounded) {
+			playerState = PlayerState_e.RUNNING;
 			acceleration = Input.acceleration;
 			lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
 			deltaAcceleration = acceleration - lowPassValue;
+
 
 			drag = .6f;
 			//Debug.Log("sqrt_delta_accel: " + deltaAcceleration.sqrMagnitude);

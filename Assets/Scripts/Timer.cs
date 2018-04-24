@@ -32,5 +32,13 @@ public class Timer : MonoBehaviour {
 		string time = minutes.ToString ("00") + ":" + seconds.ToString ("00");
 		timerText.SetText (time);
 		resultTimer.SetText (time);
+
+		if (GameStateController.Instance.GetGameState () == GameState_e.RESULT) {
+			sendTimerToURL ();
+		}
+	}
+
+	void sendTimerToURL(){
+		//send timer to the url
 	}
 }
