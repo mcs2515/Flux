@@ -46,8 +46,16 @@ public class GyroControls : MonoBehaviour {
 			Vector3 gyroInput = -Input.gyro.rotationRateUnbiased;
 
 			Vector3 targetEulerAngles = previousEulerAngles + gyroInput * (Time.deltaTime / 1.5f) * Mathf.Rad2Deg;
-			targetEulerAngles.x = 0.0f; // Only this line has been added
+			targetEulerAngles.x = 0.0f;
 			targetEulerAngles.z = 0.0f;
+
+
+			if (targetEulerAngles.y < 180) {
+				transform.eulerAngles = new targetEulerAngles;
+				Mathf.Clamp (targetEulerAngles.y, 0f, 75f);
+			} else {
+				Mathf.Clamp (targetEulerAngles.y-360f, -65f, 0f);
+			}
 
 			transform.eulerAngles = targetEulerAngles;
 		}
