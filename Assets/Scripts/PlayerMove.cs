@@ -38,6 +38,7 @@ public class PlayerMove : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+		playerState = PlayerState_e.STANBY;
 		player = GameObject.Find ("Player");
 
 		start_position = new Vector3 (player.transform.position.x, player.transform.position.y, player.transform.position.z);
@@ -105,6 +106,7 @@ public class PlayerMove : MonoBehaviour {
 
 			//if jumping
 			if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold) {
+				playerState = PlayerState_e.JUMP;
 				moveDir = new Vector3 (0, 1f, moveDir.z * 1.5f);
 				moveDir = transform.TransformDirection (moveDir);
 				moveDir.y *= jumpforce;
@@ -123,6 +125,7 @@ public class PlayerMove : MonoBehaviour {
 			moveDir.z -= drag;
 		} 
 		else {
+			playerState = PlayerState_e.STANBY;
 			moveDir.z = 0;
 		}
 
@@ -151,6 +154,7 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	void ResetPlayer(){
+		playerState = PlayerState_e.STANBY;
 		player.transform.position = start_position;
 		player.transform.eulerAngles = start_rotation;
 		lives = 2;
