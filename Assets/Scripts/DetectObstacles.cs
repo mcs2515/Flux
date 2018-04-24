@@ -59,6 +59,7 @@ public class DetectObstacles : MonoBehaviour {
 				if (counter == 0) {
 					playerScript.Lives--;
 					counter++;
+					GameObject.Find ("Player").GetComponent<PlayerMove> ().ChangePlayerState (PlayerState_e.MISS);
 				}
 
 				/*if (timer >= .5f) {

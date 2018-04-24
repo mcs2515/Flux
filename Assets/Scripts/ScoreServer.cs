@@ -15,7 +15,7 @@ public class ScoreServer : MonoBehaviour {
 		
 	}
 
-	IEnumerator Upload(){
+	public IEnumerator Upload(){
 		//byte[] myData = System.Text.Encoding.UTF8.GetBytes("This is some test data");
 		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=2&score=321");
 		yield return www.Send();

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum PlayerState_e{
-	STANBY,
-	JUMP,
+	STANDBY,
 	RUNNING,
-	MISS,
+	JUMP,
+	MISS
 }
 
 public class PlayerMove : MonoBehaviour {
 
-	PlayerState_e playerState = PlayerState_e.STANBY;
+	PlayerState_e playerState = PlayerState_e.STANDBY;
+	//PlayerState_e playerStateLast = this.playerState;
     CharacterController controller;
 	GameObject player;
     Vector3 moveDir = Vector3.zero;
@@ -38,7 +39,7 @@ public class PlayerMove : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		playerState = PlayerState_e.STANBY;
+		playerState = PlayerState_e.STANDBY;
 		player = GameObject.Find ("Player");
 
 		start_position = new Vector3 (player.transform.position.x, player.transform.position.y, player.transform.position.z);
@@ -84,7 +85,7 @@ public class PlayerMove : MonoBehaviour {
 	void PlayerMovement(){
 		//Debug.Log (drag);
 		if (controller.isGrounded) {
-			playerState = PlayerState_e.RUNNING;
+			ChangePlayerState(PlayerState_e.RUNNING);
 			acceleration = Input.acceleration;
 			lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
 			deltaAcceleration = acceleration - lowPassValue;
@@ -125,7 +126,7 @@ public class PlayerMove : MonoBehaviour {
 			moveDir.z -= drag;
 		} 
 		else {
-			playerState = PlayerState_e.STANBY;
+			playerState = PlayerState_e.STANDBY;
 			moveDir.z = 0;
 		}
 
@@ -154,7 +155,7 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	void ResetPlayer(){
-		playerState = PlayerState_e.STANBY;
+		ChangePlayerState(PlayerState_e.STANDBY);
 		player.transform.position = start_position;
 		player.transform.eulerAngles = start_rotation;
 		lives = 2;
@@ -163,5 +164,17 @@ public class PlayerMove : MonoBehaviour {
 	public int Lives{
 		get{return lives;}
 		set{lives=value;}
-	}	
+	}
+
+	public void ChangePlayerState(PlayerState_e newState){
+		playerState = newState;
+		Debug.Log ("changed state to " + newState);
+	}
+
+	public void CheckPlayerState(){
+		//if (this.playerState != this.playerStateLast) {
+			//Debug.Log("player state changed");
+
+//		}
+	}
 }
