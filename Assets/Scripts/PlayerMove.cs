@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public enum PlayerState_e{
+	NONE,
 	STANDBY,
 	RUNNING,
 	JUMP,
@@ -40,7 +41,7 @@ public class PlayerMove : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		playerState = PlayerState_e.STANDBY;
+		playerState = PlayerState_e.NONE;
 		playerStateLast = playerState;
 		player = GameObject.Find ("Player");
 
@@ -87,7 +88,6 @@ public class PlayerMove : MonoBehaviour {
 	void PlayerMovement(){
 		//Debug.Log (drag);
 		if (controller.isGrounded) {
-			ChangePlayerState(PlayerState_e.RUNNING);
 			acceleration = Input.acceleration;
 			lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
 			deltaAcceleration = acceleration - lowPassValue;
@@ -105,11 +105,12 @@ public class PlayerMove : MonoBehaviour {
 			if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
 				moveDir = new Vector3 (0f, 0f, 1f);
 				moveDir *= speed;
+				ChangePlayerState(PlayerState_e.RUNNING);
 			}
 
 			//if jumping
 			if (deltaAcceleration.sqrMagnitude >= jumpDetectionThreshold) {
-				playerState = PlayerState_e.JUMP;
+				ChangePlayerState (PlayerState_e.JUMP);
 				moveDir = new Vector3 (0, 1f, moveDir.z * 1.5f);
 				moveDir = transform.TransformDirection (moveDir);
 				moveDir.y *= jumpforce;
@@ -128,7 +129,6 @@ public class PlayerMove : MonoBehaviour {
 			moveDir.z -= drag;
 		} 
 		else {
-			playerState = PlayerState_e.STANDBY;
 			moveDir.z = 0;
 		}
 
@@ -169,7 +169,7 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	public void ChangePlayerState(PlayerState_e newState){
-		if (playerState != playerStateLast) {
+		if (newState != playerState) {
 			
 			playerStateLast = playerState;
 			playerState = newState;

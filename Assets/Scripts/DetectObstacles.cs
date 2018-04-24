@@ -91,14 +91,13 @@ public class DetectObstacles : MonoBehaviour {
 			skybox.SetColor("_Tint",skyDayColor);
 			RenderSettings.skybox = skybox;
 			//damage_screen.SetActive (false);
-
-			GameObject.Find ("Player").GetComponent<PlayerMove> ().ChangePlayerState (PlayerState_e.JUMP);
 		}
 
 		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
 			timer = 0;
 			counter = 0;
 			skyLerp = 0;
+			GameObject.Find ("Player").GetComponent<PlayerMove> ().ChangePlayerState (PlayerState_e.STANDBY);
 		}
 	}
 

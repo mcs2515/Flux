@@ -42,6 +42,8 @@ public class GameStateController : MonoBehaviour {
 
 		CheckGameState(gamestate);
 		Debug.Log ("start screen");
+
+		GameObject.Find("Player").GetComponent<PlayerMove>().ChangePlayerState(PlayerState_e.STANDBY);
 	}
 
 	public void ResumeMenu(){
@@ -59,6 +61,8 @@ public class GameStateController : MonoBehaviour {
 
 		CheckGameState(gamestate);
 		Debug.Log ("paused");
+
+		GameObject.Find("Player").GetComponent<PlayerMove>().ChangePlayerState(PlayerState_e.STANDBY);
 	}
 
 	public void ResultMenu(){
@@ -67,6 +71,9 @@ public class GameStateController : MonoBehaviour {
 
 		CheckGameState(gamestate);
 		Debug.Log ("paused");
+
+
+		GameObject.Find("Player").GetComponent<PlayerMove>().ChangePlayerState(PlayerState_e.STANDBY);
 	}
 
 	public static GameStateController Instance{
