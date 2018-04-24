@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public enum PlayerState_e{
 	STANDBY,
@@ -12,7 +13,7 @@ public enum PlayerState_e{
 public class PlayerMove : MonoBehaviour {
 
 	PlayerState_e playerState = PlayerState_e.STANDBY;
-	//PlayerState_e playerStateLast = this.playerState;
+	PlayerState_e playerStateLast;
     CharacterController controller;
 	GameObject player;
     Vector3 moveDir = Vector3.zero;
@@ -40,6 +41,7 @@ public class PlayerMove : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		playerState = PlayerState_e.STANDBY;
+		playerStateLast = playerState;
 		player = GameObject.Find ("Player");
 
 		start_position = new Vector3 (player.transform.position.x, player.transform.position.y, player.transform.position.z);
@@ -167,14 +169,34 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	public void ChangePlayerState(PlayerState_e newState){
-		playerState = newState;
-		Debug.Log ("changed state to " + newState);
+		if (playerState != playerStateLast) {
+			
+			playerStateLast = playerState;
+			playerState = newState;
+
+			StartCoroutine (UploadState (playerState.ToString ()));
+
+			Debug.Log ("changed state to " + newState);
+		}
 	}
 
-	public void CheckPlayerState(){
-		//if (this.playerState != this.playerStateLast) {
-			//Debug.Log("player state changed");
+	public IEnumerator UploadState(string playerStateString){
+		//byte[] myData = System.Text.Encoding.UTF8.GetBytes("This is some test data");
+		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=0&state=" + playerStateString);
+		yield return www.Send();
 
-//		}
+		if(www.isNetworkError) {
+			Debug.Log(www.error);
+		}
+	}
+
+	public IEnumerator UploadScore(string finalScore){
+		//byte[] myData = System.Text.Encoding.UTF8.GetBytes("This is some test data");
+		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=2&score=" + finalScore);
+		yield return www.Send();
+
+		if(www.isNetworkError) {
+			Debug.Log(www.error);
+		}
 	}
 }
