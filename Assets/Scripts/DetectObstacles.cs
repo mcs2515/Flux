@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DetectObstacles : MonoBehaviour {
 
@@ -12,6 +13,9 @@ public class DetectObstacles : MonoBehaviour {
 	Color skyDayColor = new Color(60f/255f, 76f/255f, 84f/255f, 1);
 	Color skyDmgColor = new Color(197f/255f, 23f/255f, 30f/255f, 1);
 
+	Color32 lives_white = new Color32 (255,255,255,128);
+	Color32 lives_red = new Color32 (239, 65, 65, 255);
+
 	GameObject obj_near;
 	public PlayerMove playerScript;
 	float timer;
@@ -19,6 +23,8 @@ public class DetectObstacles : MonoBehaviour {
 	float skyLerp;
 
 	public CharacterController controller;
+	public Lives lives;
+
 	// Use this for initialization
 	void Start () {
 		obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
@@ -46,6 +52,10 @@ public class DetectObstacles : MonoBehaviour {
 
 				timer += Time.deltaTime;
 				skyLerp += Time.deltaTime/2f;
+
+				lives.health1.GetComponent<Image>().color =  lives_red;
+				lives.health2.GetComponent<Image>().color =  lives_red;
+				lives.health3.GetComponent<Image>().color =  lives_red;
 
 
 				if (skyLerp > 1f) {
@@ -80,6 +90,10 @@ public class DetectObstacles : MonoBehaviour {
 				if (skyLerp < 0) {
 					skyLerp = 0;
 				}
+
+				lives.health1.GetComponent<Image>().color =  lives_white;
+				lives.health2.GetComponent<Image>().color =  lives_white;
+				lives.health3.GetComponent<Image> ().color = lives_white;
 
 				skybox.SetColor("_Tint", Color.Lerp(skyDayColor, skyDmgColor,skyLerp));
 				RenderSettings.skybox = skybox;

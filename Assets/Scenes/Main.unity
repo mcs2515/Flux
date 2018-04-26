@@ -5419,8 +5419,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countdown_player: {fileID: 1041621188}
-  jump_player: {fileID: 0}
-  warning_player: {fileID: 0}
 --- !u!1 &897201515
 GameObject:
   m_ObjectHideFlags: 0
@@ -10486,6 +10484,7 @@ MonoBehaviour:
   skybox: {fileID: 2100000, guid: e222162ddb8d34547a133b673221b195, type: 2}
   playerScript: {fileID: 1513733898}
   controller: {fileID: 1513733899}
+  lives: {fileID: 1603277583}
 --- !u!1 &1758901005
 GameObject:
   m_ObjectHideFlags: 0
