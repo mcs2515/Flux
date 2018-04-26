@@ -28,6 +28,7 @@ public class PlayerMove : MonoBehaviour {
     public float jumpforce;
     float gravity = 9.5f;
 	private float delay;
+	private float timer;
 
     Vector3 acceleration;
     Vector3 deltaAcceleration;
@@ -37,7 +38,6 @@ public class PlayerMove : MonoBehaviour {
     public float jumpDetectionThreshold = 0f;
     float lowPassFilterFactor;
     private Vector3 lowPassValue;
-	private float timer;
 
     // Use this for initialization
     void Start () {
@@ -69,11 +69,11 @@ public class PlayerMove : MonoBehaviour {
 			if (GameStateController.Instance.Delay_Input) {
 				delay += Time.deltaTime;
 				float seconds = Mathf.Floor (delay);
-				VideoControllers.Instance.PlayClips ("countdown");
+				VideoControllers.Instance.PlayCountdown (true);
 				GameStateController.Instance.game_screen.SetActive (false);
 
 				if (seconds >= 4f) {
-					VideoControllers.Instance.PlayClips ("none");
+					VideoControllers.Instance.PlayCountdown (false);
 					GameStateController.Instance.Delay_Input = false;
 					GameStateController.Instance.game_screen.SetActive (true);
 					delay = 0;
@@ -96,7 +96,7 @@ public class PlayerMove : MonoBehaviour {
 			lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
 			deltaAcceleration = acceleration - lowPassValue;
 
-			drag = .6f;
+			drag = .5f;
 
 			//if moving
 			if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {
@@ -114,7 +114,7 @@ public class PlayerMove : MonoBehaviour {
 			}
 		} 
 		else {
-			drag = .3f;
+			drag = .1f;
 		}
 
 		//always ground the person
@@ -172,13 +172,10 @@ public class PlayerMove : MonoBehaviour {
 			playerState = newState;
 
 			StartCoroutine (UploadState (playerState.ToString ()));
-
-			Debug.Log ("changed state to " + newState);
 		}
 	}
 
 	public IEnumerator UploadState(string playerStateString){
-		//byte[] myData = System.Text.Encoding.UTF8.GetBytes("This is some test data");
 		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=0&state=" + playerStateString);
 		yield return www.Send();
 
@@ -188,7 +185,6 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	public IEnumerator UploadScore(string finalScore){
-		//byte[] myData = System.Text.Encoding.UTF8.GetBytes("This is some test data");
 		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=2&score=" + finalScore);
 		yield return www.Send();
 
