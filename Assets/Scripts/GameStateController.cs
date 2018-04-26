@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum GameState_e{
 	START,
+	COUNTDOWN,
 	GAME,
 	PAUSE,
 	RESULT,
@@ -57,7 +58,6 @@ public class GameStateController : MonoBehaviour {
 	public void PauseMenu(){
 		//show only pause screen
 		gamestate = GameState_e.PAUSE;
-		delay_input = true;
 
 		CheckGameState(gamestate);
 		Debug.Log ("paused");

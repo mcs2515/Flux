@@ -69,9 +69,13 @@ public class PlayerMove : MonoBehaviour {
 			if (GameStateController.Instance.Delay_Input) {
 				delay += Time.deltaTime;
 				float seconds = Mathf.Floor (delay);
+				VideoControllers.Instance.PlayClips ("countdown");
+				GameStateController.Instance.game_screen.SetActive (false);
 
-				if (seconds >= .5f) {
+				if (seconds >= 4f) {
+					VideoControllers.Instance.PlayClips ("none");
 					GameStateController.Instance.Delay_Input = false;
+					GameStateController.Instance.game_screen.SetActive (true);
 					delay = 0;
 				}
 			} 
@@ -92,14 +96,7 @@ public class PlayerMove : MonoBehaviour {
 			lowPassValue = Vector3.Lerp (lowPassValue, acceleration, lowPassFilterFactor);
 			deltaAcceleration = acceleration - lowPassValue;
 
-
 			drag = .6f;
-			//Debug.Log("sqrt_delta_accel: " + deltaAcceleration.sqrMagnitude);
-			//Debug.Log("accleration: " + acceleration);
-			//Debug.Log("delta_accel: " + deltaAcceleration);
-
-			//rotate character and its camera based on accelerometer
-			//controller.transform.Rotate (0, -Input.gyro.rotationRateUnbiased.y * 1.5f, 0);
 
 			//if moving
 			if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold) {

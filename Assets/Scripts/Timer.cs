@@ -9,6 +9,7 @@ public class Timer : MonoBehaviour {
 	int minutes;
 	int seconds;
 	float timer;
+	private float delay;
 
 	// Use this for initialization
 	void Start () {
@@ -20,8 +21,9 @@ public class Timer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (GameStateController.Instance.GetGameState () == GameState_e.GAME) {
-			timer += Time.deltaTime;
-
+			if (!GameStateController.Instance.Delay_Input){
+				timer += Time.deltaTime;
+			}
 		} else if (GameStateController.Instance.GetGameState () == GameState_e.START) {
 			timer = 0;
 		}
