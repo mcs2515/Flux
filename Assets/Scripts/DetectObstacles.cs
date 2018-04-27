@@ -10,7 +10,7 @@ public class DetectObstacles : MonoBehaviour {
 	public GameObject damage_screen;
 	public Material skybox;
 	//Color skyDayColor = new Color(.234f, .297331f, .328f, 1);
-	Color skyDayColor = new Color(60f/255f, 76f/255f, 84f/255f, 1);
+	Color skyDayColor = new Color(91f/255f, 89f/255f, 91f/255f, 1);
 	Color skyDmgColor = new Color(197f/255f, 23f/255f, 30f/255f, 1);
 
 	Color32 lives_white = new Color32 (255,255,255,128);
