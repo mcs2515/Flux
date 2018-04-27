@@ -13,6 +13,9 @@ public enum PlayerState_e{
 
 public class PlayerMove : MonoBehaviour {
 
+	public GameObject warning_sprite;
+	public GameObject jump_sprite;
+
 	PlayerState_e playerState = PlayerState_e.STANDBY;
 	PlayerState_e playerStateLast;
     CharacterController controller;
@@ -41,6 +44,7 @@ public class PlayerMove : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+		warning_sprite.SetActive (false);
 		playerState = PlayerState_e.NONE;
 		playerStateLast = playerState;
 		player = GameObject.Find ("Player");
@@ -143,7 +147,9 @@ public class PlayerMove : MonoBehaviour {
 			if (timer >= 10) {
 				//check again
 				if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
-					//TODO: insert  warning text here
+					jump_sprite.SetActive (false);
+					warning_sprite.SetActive (true);
+					lives--;
 					timer = 0;
 				}
 			}
