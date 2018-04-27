@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class DetectObstacles : MonoBehaviour {
 
 	public GameObject jump_sprite;
+	public GameObject warning_sprite;
+
 	public GameObject[] obstacles;
 	public GameObject damage_screen;
 	public Material skybox;
@@ -34,6 +36,7 @@ public class DetectObstacles : MonoBehaviour {
 		RenderSettings.skybox = skybox;
 
 		jump_sprite.SetActive (false);
+		warning_sprite.SetActive (false);
 		//damage_screen.SetActive (false);
 		timer = 0;
 		counter = 0;
@@ -45,7 +48,7 @@ public class DetectObstacles : MonoBehaviour {
 		
 		if (GameStateController.Instance.GetGameState () == GameState_e.GAME) {
 			obj_near = FindNearestObj ();
-			Display_Jump (obj_near);
+			Display_Sprites (obj_near);
 
 			//if colliding
 			if (IsColliding (obj_near)) {
@@ -102,6 +105,7 @@ public class DetectObstacles : MonoBehaviour {
 		} 
 		else {
 			jump_sprite.SetActive (false);
+			warning_sprite.SetActive (false);
 			skybox.SetColor("_Tint",skyDayColor);
 			RenderSettings.skybox = skybox;
 			//damage_screen.SetActive (false);
@@ -124,7 +128,7 @@ public class DetectObstacles : MonoBehaviour {
 		return null;
 	}
 
-	public void Display_Jump(GameObject obj){
+	public void Display_Sprites(GameObject obj){
 		if (obj) {
 			if ((controller.transform.position - obj.transform.position).magnitude <= 25f) {
 				jump_sprite.SetActive (true);
@@ -132,6 +136,15 @@ public class DetectObstacles : MonoBehaviour {
 			else {
 				jump_sprite.SetActive (false);
 			}
+		}
+
+		if (playerScript.playerState == PlayerState_e.STOPED) {
+			warning_sprite.SetActive (true);
+			jump_sprite.SetActive (false);
+		}
+
+		if (playerScript.playerState == PlayerState_e.RUNNING) {
+			warning_sprite.SetActive (false);
 		}
 	}
 

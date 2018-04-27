@@ -7,16 +7,14 @@ public enum PlayerState_e{
 	NONE,
 	STANDBY,
 	RUNNING,
+	STOPED,
 	JUMP,
 	MISS
 }
 
 public class PlayerMove : MonoBehaviour {
 
-	public GameObject warning_sprite;
-	public GameObject jump_sprite;
-
-	PlayerState_e playerState = PlayerState_e.STANDBY;
+	public PlayerState_e playerState = PlayerState_e.STANDBY;
 	PlayerState_e playerStateLast;
     CharacterController controller;
 	GameObject player;
@@ -44,7 +42,6 @@ public class PlayerMove : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		warning_sprite.SetActive (false);
 		playerState = PlayerState_e.NONE;
 		playerStateLast = playerState;
 		player = GameObject.Find ("Player");
@@ -147,8 +144,7 @@ public class PlayerMove : MonoBehaviour {
 			if (timer >= 10) {
 				//check again
 				if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
-					jump_sprite.SetActive (false);
-					warning_sprite.SetActive (true);
+					playerState = PlayerState_e.STOPED;
 					lives--;
 					timer = 0;
 				}
