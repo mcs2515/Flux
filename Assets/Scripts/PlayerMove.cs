@@ -22,6 +22,7 @@ public class PlayerMove : MonoBehaviour {
 	GameObject player;
     Vector3 moveDir = Vector3.zero;
 	int lives;
+	bool stopped = false;
 
 	Vector3 start_position = Vector3.zero;
 	Vector3 start_rotation = Vector3.zero;
@@ -131,7 +132,7 @@ public class PlayerMove : MonoBehaviour {
 
 		//always ground the person
 		moveDir.y -= gravity * Time.deltaTime;
-		moveDir.x += slant;
+		moveDir.x = - .11f;
 
 		//slow down player
 		if (moveDir.z > 0) {
@@ -152,7 +153,9 @@ public class PlayerMove : MonoBehaviour {
 		timer += Time.deltaTime;
 
 		if ((deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) && moveDir.z == 0) {
+			stopped = true;
 			if (timer >= 10) {
+				playerState = PlayerState_e.STOPED;
 				//check again
 				if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
 					playerState = PlayerState_e.STOPED;
@@ -165,6 +168,7 @@ public class PlayerMove : MonoBehaviour {
 		} 
 		else {
 			timer = 0;
+			stopped = false;
 		}
 	}
 

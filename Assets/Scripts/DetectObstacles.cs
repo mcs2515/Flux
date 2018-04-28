@@ -72,7 +72,6 @@ public class DetectObstacles : MonoBehaviour {
 			hide_near = FindNearestHideMarker ();
 			Display_Sprites (obj_near);
 
-			Debug.Log ("tile num: " + tile_num);
 			if (IsCollidingWithMarker (marker_near)) {
 				if (tile_counter == 0) {
 					tile_num++;
@@ -82,8 +81,7 @@ public class DetectObstacles : MonoBehaviour {
 			} else {
 				tile_counter = 0;
 			}
-
-			Debug.Log ("hide num: " + hide_num);
+				
 			if (IsCollidingWithMarker (hide_near)) {
 				if (hide_counter == 0) {
 					hide_num++;
@@ -152,9 +150,6 @@ public class DetectObstacles : MonoBehaviour {
 			warning_sprite.SetActive (false);
 			skybox.SetColor("_Tint",skyDayColor);
 			RenderSettings.skybox = skybox;
-			tile_num = 0;
-			hide_num = 0;
-			DisplayTiles ();
 			//damage_screen.SetActive (false);
 		}
 
@@ -162,6 +157,11 @@ public class DetectObstacles : MonoBehaviour {
 			timer = 0;
 			counter = 0;
 			skyLerp = 0;
+
+			tile_num = 0;
+			hide_num = 0;
+			DisplayTiles ();
+
 			GameObject.Find ("Player").GetComponent<PlayerMove> ().ChangePlayerState (PlayerState_e.STANDBY);
 		}
 	}
