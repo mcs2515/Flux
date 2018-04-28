@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Obstacle
   - Tiles
+  - marker
+  - hide
   layers:
   - Default
   - TransparentFX

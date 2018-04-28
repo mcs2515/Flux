@@ -164,8 +164,11 @@ public class MeshControl : MonoBehaviour {
 	}
 
 	void CheckStart(){
-		if (Vector3.Distance(GameObject.Find ("Player").transform.position, transform.position) < 80.0f) {
+		if (Vector3.Distance (GameObject.Find ("Player").transform.position, transform.position) < 80.0f) {
 			start = true;
+		} else {
+			Restart ();
+			start = false;
 		}
 	}
 }

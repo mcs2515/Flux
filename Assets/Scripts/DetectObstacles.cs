@@ -8,6 +8,15 @@ public class DetectObstacles : MonoBehaviour {
 	public GameObject jump_sprite;
 	public GameObject warning_sprite;
 
+	public GameObject[] tile_markers;
+	public GameObject[] tile_group;
+	public GameObject[] hide_markers;
+
+	int tile_num;
+	int tile_counter;
+	int hide_num;
+	int hide_counter;
+
 	public GameObject[] obstacles;
 	public GameObject damage_screen;
 	public Material skybox;
@@ -19,6 +28,9 @@ public class DetectObstacles : MonoBehaviour {
 	Color32 lives_red = new Color32 (239, 65, 65, 255);
 
 	GameObject obj_near;
+	GameObject marker_near;
+	GameObject hide_near;
+
 	public PlayerMove playerScript;
 	float timer;
 	int counter;
@@ -30,6 +42,14 @@ public class DetectObstacles : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+		tile_markers = GameObject.FindGameObjectsWithTag("marker");
+		hide_markers = GameObject.FindGameObjectsWithTag("hide");
+
+		tile_num = 0;
+		hide_counter = 0;
+		hide_num = 0;
+		tile_counter = 0;
+		DisplayTiles ();
 
 		skybox = RenderSettings.skybox;
 		skybox.SetColor("_Tint", skyDayColor);
@@ -48,7 +68,31 @@ public class DetectObstacles : MonoBehaviour {
 		
 		if (GameStateController.Instance.GetGameState () == GameState_e.GAME) {
 			obj_near = FindNearestObj ();
+			marker_near = FindNearestMarker ();
+			hide_near = FindNearestHideMarker ();
 			Display_Sprites (obj_near);
+
+			Debug.Log ("tile num: " + tile_num);
+			if (IsCollidingWithMarker (marker_near)) {
+				if (tile_counter == 0) {
+					tile_num++;
+					tile_counter++;
+					DisplayTiles ();
+				}
+			} else {
+				tile_counter = 0;
+			}
+
+			Debug.Log ("hide num: " + hide_num);
+			if (IsCollidingWithMarker (hide_near)) {
+				if (hide_counter == 0) {
+					hide_num++;
+					hide_counter++;
+					HideTiles ();
+				}
+			} else {
+				hide_counter = 0;
+			}
 
 			//if colliding
 			if (IsColliding (obj_near)) {
@@ -108,6 +152,8 @@ public class DetectObstacles : MonoBehaviour {
 			warning_sprite.SetActive (false);
 			skybox.SetColor("_Tint",skyDayColor);
 			RenderSettings.skybox = skybox;
+			tile_num = 0;
+			hide_num = 0;
 			//damage_screen.SetActive (false);
 		}
 
@@ -123,6 +169,24 @@ public class DetectObstacles : MonoBehaviour {
 		foreach(GameObject obj in obstacles) {
 			if ((controller.transform.position - obj.transform.position).magnitude <= 30f) {
 				return obj;
+			}
+		}
+		return null;
+	}
+
+	public GameObject FindNearestMarker(){
+		foreach(GameObject marker in tile_markers) {
+			if ((controller.transform.position - marker.transform.position).magnitude <= 30f) {
+				return marker;
+			}
+		}
+		return null;
+	}
+
+	public GameObject FindNearestHideMarker(){
+		foreach(GameObject marker in hide_markers) {
+			if ((controller.transform.position - marker.transform.position).magnitude <= 30f) {
+				return marker;
 			}
 		}
 		return null;
@@ -159,5 +223,42 @@ public class DetectObstacles : MonoBehaviour {
 			} 
 		}
 		return false;
+	}
+
+	public bool IsCollidingWithMarker(GameObject obj){
+		if (obj) {
+			if ((controller.transform.position - obj.transform.position).magnitude <= 10f) {
+				return true;
+			} 
+		}
+		return false;
+	}
+
+	public void DisplayTiles(){
+		switch (tile_num) {
+		case 0:
+			tile_group [0].SetActive (true);
+			tile_group [1].SetActive (false);
+			tile_group [2].SetActive (false);
+			break;
+		case 1:
+			tile_group [1].SetActive (true);
+			break;
+		case 2:
+			tile_group [2].SetActive (true);
+
+			break;
+		}
+	}
+
+	public void HideTiles(){
+		switch (hide_num) {
+		case 1:
+			tile_group [0].SetActive (false);
+			break;
+		case 2:
+			tile_group [1].SetActive (false);
+			break;
+		}
 	}
 }
