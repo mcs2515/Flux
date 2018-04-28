@@ -17,7 +17,8 @@ public class PlayerMove : MonoBehaviour {
 	public PlayerState_e playerState = PlayerState_e.STANDBY;
 	public GameObject end_obj;
 	PlayerState_e playerStateLast;
-    public CharacterController controller;
+    CharacterController controller;
+	public GameObject player_camera;
 	GameObject player;
     Vector3 moveDir = Vector3.zero;
 	int lives;
@@ -170,7 +171,7 @@ public class PlayerMove : MonoBehaviour {
 	void ResetPlayer(){
 		ChangePlayerState(PlayerState_e.STANDBY);
 		player.transform.position = start_position;
-		player.transform.eulerAngles = start_rotation;
+		player_camera.transform.eulerAngles = start_rotation;
 		lives = 2;
 	}
 

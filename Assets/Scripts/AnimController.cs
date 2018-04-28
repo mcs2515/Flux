@@ -13,10 +13,14 @@ public class AnimController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		CheckStart ();
+		
 
 		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
-			anim.ResetTrigger ("startAnim");
+			anim.Rebind ();
+		}
+
+		if(GameStateController.Instance.GetGameState () == GameState_e.GAME){
+			CheckStart ();
 		}
 	}
 

@@ -121,9 +121,6 @@ public class DetectObstacles : MonoBehaviour {
 
 	public GameObject FindNearestObj(){
 		foreach(GameObject obj in obstacles) {
-			if ((controller.transform.position - obj.transform.position).magnitude <= 130f) {
-				obj.GetComponent<Renderer>().enabled = true;
-			}
 			if ((controller.transform.position - obj.transform.position).magnitude <= 30f) {
 				return obj;
 			}
