@@ -154,6 +154,7 @@ public class DetectObstacles : MonoBehaviour {
 			RenderSettings.skybox = skybox;
 			tile_num = 0;
 			hide_num = 0;
+			DisplayTiles ();
 			//damage_screen.SetActive (false);
 		}
 
