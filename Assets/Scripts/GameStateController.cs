@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public enum GameState_e{
 	START,
@@ -66,7 +67,11 @@ public class GameStateController : MonoBehaviour {
 		gamestate = GameState_e.RESULT;
 
 		CheckGameState(gamestate);
+
+		//server stuff
 		GameObject.Find("Player").GetComponent<PlayerMove>().ChangePlayerState(PlayerState_e.STANDBY);
+		string resultTime = GameObject.Find ("GameTimer").GetComponent<Timer> ().GetTime ();
+		StartCoroutine (UploadScore (resultTime) );
 	}
 
 	public static GameStateController Instance{
@@ -113,6 +118,19 @@ public class GameStateController : MonoBehaviour {
 				break;
 		default:
 			break;
+		}
+	}
+
+	public IEnumerator UploadScore(string time){
+		//byte[] myData = System.Text.Encoding.UTF8.GetBytes("This is some test data");
+		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=0&score=" + time);
+		yield return www.Send();
+
+		if(www.isNetworkError) {
+			Debug.Log(www.error);
+		}
+		else {
+			Debug.Log("Upload complete!");
 		}
 	}
 }
