@@ -266,32 +266,32 @@ PlayerSettings:
   - m_BuildTarget: Android
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: fbd35022c91ae9d439ed87a2c7e44f76, type: 3}
       m_Width: 192
       m_Height: 192
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 25938aba1f2a64549a3a1beee40e58ec, type: 3}
       m_Width: 144
       m_Height: 144
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 5e02c94878ce0ec449e0a98ac6c9fdb5, type: 3}
       m_Width: 96
       m_Height: 96
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 2c70bb4147ec27b4ca5a5bffd5bdba29, type: 3}
       m_Width: 72
       m_Height: 72
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 8fe01f6e44aabf14687fa9effb16fbb8, type: 3}
       m_Width: 48
       m_Height: 48
       m_Kind: 0
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: f1acf8bbeec60144f8e002cd6ec8faf8, type: 3}
       m_Width: 36
       m_Height: 36
       m_Kind: 0
