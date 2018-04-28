@@ -40,4 +40,9 @@ public class Timer : MonoBehaviour {
 		timerText.SetText (time);
 		resultTimer.SetText (time);
 	}
+
+	public string GetTime(){
+		string time = minutes.ToString ("00") + ":" + seconds.ToString ("00");
+		return time;
+	}
 }
