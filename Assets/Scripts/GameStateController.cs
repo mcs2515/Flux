@@ -19,6 +19,7 @@ public class GameStateController : MonoBehaviour {
 	public GameObject results_screen;
 	public GameObject results_background;
 	public GameObject canvas;
+	public GameObject result_sprite;
 
 	GameState_e gamestate;
 	public bool delay_input;
@@ -93,6 +94,7 @@ public class GameStateController : MonoBehaviour {
 		start_screen.SetActive(false);
 		game_screen.SetActive (false);
 		results_background.SetActive (false);
+		result_sprite.SetActive (false);
 
 		switch (state) {
 			case GameState_e.START:
@@ -105,15 +107,12 @@ public class GameStateController : MonoBehaviour {
 				pause_screen.SetActive (true);
 				break;
 			case GameState_e.RESULT:
+				result_sprite.SetActive (true);
 				results_screen.SetActive(true);
 				results_background.SetActive (true);
 				break;
 		default:
 			break;
 		}
-	}
-
-	public void Vibrate(){
-		Handheld.Vibrate ();
 	}
 }

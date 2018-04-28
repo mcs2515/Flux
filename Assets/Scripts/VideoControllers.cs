@@ -12,15 +12,16 @@ public class VideoControllers : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		countdown_player.playOnAwake = false;
+		//countdown_player.playOnAwake = false;
 		countdown_player.source = VideoSource.VideoClip;
-
 		countdown_player.Stop ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(GameStateController.Instance.GetGameState() == GameState_e.START){
+			countdown_player.Prepare();
+		}
 	}
 
 	public static VideoControllers Instance{
