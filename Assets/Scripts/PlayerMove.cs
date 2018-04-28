@@ -15,6 +15,7 @@ public enum PlayerState_e{
 public class PlayerMove : MonoBehaviour {
 
 	public PlayerState_e playerState = PlayerState_e.STANDBY;
+	public GameObject end_obj;
 	PlayerState_e playerStateLast;
     public CharacterController controller;
 	GameObject player;
@@ -23,6 +24,10 @@ public class PlayerMove : MonoBehaviour {
 
 	Vector3 start_position = Vector3.zero;
 	Vector3 start_rotation = Vector3.zero;
+	Vector3 end_position = Vector3.zero;
+
+	float distance;
+	float slant;
 
     public float speed;
     private float drag;
@@ -46,8 +51,13 @@ public class PlayerMove : MonoBehaviour {
 		playerStateLast = playerState;
 		player = GameObject.Find ("Player");
 
+		end_position = new Vector3(end_obj.transform.position.x, end_obj.transform.position.y, end_obj.transform.position.z);
+
 		start_position = new Vector3 (player.transform.position.x, player.transform.position.y, player.transform.position.z);
 		start_rotation = new Vector3 (player.transform.eulerAngles.x, player.transform.eulerAngles.y, player.transform.eulerAngles.z);
+
+		distance = end_position.z - start_position.z;
+		slant = (end_position.x-start_position.x)/distance;
 
         controller = gameObject.GetComponent<CharacterController>();    
 		timer = 0f;
@@ -120,7 +130,7 @@ public class PlayerMove : MonoBehaviour {
 
 		//always ground the person
 		moveDir.y -= gravity * Time.deltaTime;
-		moveDir.x = 0;
+		moveDir.x += slant;
 
 		//slow down player
 		if (moveDir.z > 0) {
