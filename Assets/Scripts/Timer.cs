@@ -23,6 +23,11 @@ public class Timer : MonoBehaviour {
 		if (GameStateController.Instance.GetGameState () == GameState_e.GAME) {
 			if (!GameStateController.Instance.Delay_Input){
 				timer += Time.deltaTime;
+
+				//remove after IMAGINE RIT
+				if(timer>=90f){ //1 min 30 sec
+					GameStateController.Instance.ResultMenu();
+				}
 			}
 		} else if (GameStateController.Instance.GetGameState () == GameState_e.START) {
 			timer = 0;

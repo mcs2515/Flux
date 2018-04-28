@@ -145,8 +145,10 @@ public class PlayerMove : MonoBehaviour {
 				//check again
 				if (deltaAcceleration.sqrMagnitude < shakeDetectionThreshold) {
 					playerState = PlayerState_e.STOPED;
-					lives--;
-					timer = 0;
+					if (timer >= 12) {
+						lives--;
+						timer = 0;
+					}
 				}
 			}
 		} 
