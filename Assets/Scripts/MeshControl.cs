@@ -7,7 +7,7 @@ using UnityEngine;
 public class MeshControl : MonoBehaviour {
 
 	Mesh deformingMesh;
-	Vector3[] originalVertices, displacedVertices, currentVertices;
+	Vector3[] startingVertices, originalVertices, displacedVertices, currentVertices;
 	bool[] upwardBound;
 
 	public Material gridTex;
@@ -33,6 +33,7 @@ public class MeshControl : MonoBehaviour {
 		controllerI = 0;
 
         deformingMesh = GetComponent<MeshFilter>().mesh;
+		startingVertices = deformingMesh.vertices;
         originalVertices = deformingMesh.vertices;
         displacedVertices = new Vector3[originalVertices.Length];
         currentVertices = new Vector3[originalVertices.Length];
@@ -73,9 +74,10 @@ public class MeshControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (start) {
-            if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
+		if (GameStateController.Instance.GetGameState() == GameState_e.GAME) {
+			CheckStart ();
 
+			if (start) {
                 int j = 0;
 				for (int i = 0; i < extras.Length; i++) {
 					extras [i].transform.position = transform.position + transform.localScale.x * currentVertices [j] + new Vector3 (0, -2f, 0);
@@ -110,13 +112,11 @@ public class MeshControl : MonoBehaviour {
 					controllerI = 0;
 				}
 			}
-		}else {
-			CheckStart ();
-            //start = true;
 		}
 
 		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
 			Restart ();
+			start = false;
 		}
 	}
 
@@ -147,6 +147,7 @@ public class MeshControl : MonoBehaviour {
 			//Debug.Log ("restart pos " + extras [i].transform.position);
         }
 
+		deformingMesh.vertices = startingVertices;
 
     }
 
