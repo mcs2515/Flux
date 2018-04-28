@@ -14,11 +14,16 @@ public class AnimController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		CheckStart ();
+
+		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
+			anim.ResetTrigger ("startAnim");
+		}
 	}
 
 	void CheckStart(){
-		if (Vector3.Distance(GameObject.Find ("Player").transform.position, transform.position) < 100.0f) {
+		if (Vector3.Distance(GameObject.Find ("Player").transform.position, transform.position) < 110.0f) {
 			anim.SetTrigger ("startAnim");
 		}
+
 	}
 }

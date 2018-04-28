@@ -114,6 +114,10 @@ public class MeshControl : MonoBehaviour {
 			CheckStart ();
             //start = true;
 		}
+
+		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
+			Restart ();
+		}
 	}
 
     void Restart()

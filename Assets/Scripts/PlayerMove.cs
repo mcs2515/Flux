@@ -16,7 +16,7 @@ public class PlayerMove : MonoBehaviour {
 
 	public PlayerState_e playerState = PlayerState_e.STANDBY;
 	PlayerState_e playerStateLast;
-    CharacterController controller;
+    public CharacterController controller;
 	GameObject player;
     Vector3 moveDir = Vector3.zero;
 	int lives;
