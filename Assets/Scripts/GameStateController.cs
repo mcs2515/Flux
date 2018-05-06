@@ -123,7 +123,11 @@ public class GameStateController : MonoBehaviour {
 
 	public IEnumerator UploadScore(string time){
 		//byte[] myData = System.Text.Encoding.UTF8.GetBytes("This is some test data");
-		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=0&score=" + time);
+		//team blue
+		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=1&score=" + time);
+
+		//team red
+		//UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=0&score=" + time);
 		yield return www.Send();
 
 		if(www.isNetworkError) {

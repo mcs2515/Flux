@@ -195,7 +195,10 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	public IEnumerator UploadState(string playerStateString){
-		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=0&state=" + playerStateString);
+		//team blue
+		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=1&state=" + playerStateString);
+		//team red
+		//UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=0&state=" + playerStateString);
 		yield return www.Send();
 
 		if(www.isNetworkError) {
@@ -204,7 +207,10 @@ public class PlayerMove : MonoBehaviour {
 	}
 
 	public IEnumerator UploadScore(string finalScore){
-		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=2&score=" + finalScore);
+		//team blue
+		UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=1&score=" + finalScore);
+		//team red
+		//UnityWebRequest www = UnityWebRequest.Get("http://serenity.ist.rit.edu/~amp4129/341/flux/scores.php?i=0&score=" + finalScore);
 		yield return www.Send();
 
 		if(www.isNetworkError) {
