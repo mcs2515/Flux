@@ -57,7 +57,7 @@ public class DetectObstacles : MonoBehaviour {
 
 		jump_sprite.SetActive (false);
 		warning_sprite.SetActive (false);
-		//damage_screen.SetActive (false);
+
 		timer = 0;
 		counter = 0;
 		skyLerp = 0;
@@ -102,12 +102,10 @@ public class DetectObstacles : MonoBehaviour {
 				lives.health2.GetComponent<Image>().color =  lives_red;
 				lives.health3.GetComponent<Image>().color =  lives_red;
 
-
 				if (skyLerp > 1f) {
 					skyLerp = 1f;
 				}
 					
-				//damage_screen.SetActive (true);
 				skybox.SetColor("_Tint", Color.Lerp(skyDayColor,skyDmgColor, skyLerp));
 				RenderSettings.skybox = skybox;
 
@@ -116,11 +114,7 @@ public class DetectObstacles : MonoBehaviour {
 					counter++;
 					GameObject.Find ("Player").GetComponent<PlayerMove> ().ChangePlayerState (PlayerState_e.MISS);
 				}
-
-				/*if (timer >= .5f) {
-					//damage_screen.SetActive (false);
-				}*/
-
+					
 				if (timer >= 3.0f) {
 					counter = 0;
 					timer = 0;
@@ -142,7 +136,6 @@ public class DetectObstacles : MonoBehaviour {
 
 				skybox.SetColor("_Tint", Color.Lerp(skyDayColor, skyDmgColor,skyLerp));
 				RenderSettings.skybox = skybox;
-				//damage_screen.SetActive (false);
 			}
 		} 
 		else {
@@ -150,7 +143,6 @@ public class DetectObstacles : MonoBehaviour {
 			warning_sprite.SetActive (false);
 			skybox.SetColor("_Tint",skyDayColor);
 			RenderSettings.skybox = skybox;
-			//damage_screen.SetActive (false);
 		}
 
 		if (GameStateController.Instance.GetGameState () == GameState_e.START) {
