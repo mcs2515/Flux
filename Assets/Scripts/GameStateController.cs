@@ -71,7 +71,7 @@ public class GameStateController : MonoBehaviour {
 		//server stuff
 		GameObject.Find("Player").GetComponent<PlayerMove>().ChangePlayerState(PlayerState_e.STANDBY);
 		string resultTime = GameObject.Find ("GameTimer").GetComponent<Timer> ().GetTime ();
-		StartCoroutine (UploadScore (resultTime) );
+		//StartCoroutine (UploadScore (resultTime) );
 	}
 
 	public static GameStateController Instance{

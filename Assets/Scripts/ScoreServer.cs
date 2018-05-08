@@ -7,7 +7,7 @@ public class ScoreServer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		StartCoroutine (Upload ());
+		//StartCoroutine (Upload ());
 	}
 	
 	// Update is called once per frame
